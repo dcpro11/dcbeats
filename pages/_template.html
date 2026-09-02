@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  DC BEATS — Page Template
+  ============================================================
+  HOW TO USE THIS TEMPLATE:
+  1. Copy this file:  cp pages/_template.html pages/your-page.html
+  2. Replace every  !! EDIT !!  marker below
+  3. Fill in the page content between the content markers
+  4. If this page belongs in the footer nav, open js/site.js
+     and add an entry to FOOTER_SERVICES or FOOTER_LEGAL
+  5. Add the page URL to sitemap.xml
+
+  HOW TO REMOVE A PAGE LATER:
+  1. Delete the HTML file
+  2. Remove its entry from js/site.js footer arrays
+  3. Remove it from sitemap.xml
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- !! EDIT: write a clear 1-sentence description (max 160 chars) -->
+  <meta name="description" content="!! EDIT: Page description here." />
+
+  <!-- Use "index, follow" for public pages. "noindex, follow" for legal/policy pages. -->
+  <meta name="robots" content="index, follow" />
+
+  <!-- !! EDIT: replace the slug at the end -->
+  <link rel="canonical" href="https://dcbeats.net/pages/your-page.html" />
+
+  <!-- Open Graph — shown when shared on social media / WhatsApp -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/your-page.html" />
+  <meta property="og:title"       content="!! EDIT: Page Title — DC Beats" />
+  <meta property="og:description" content="!! EDIT: Same as meta description above." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta property="og:locale"      content="en_US" />
+
+  <!-- Twitter / X card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="!! EDIT: Page Title — DC Beats" />
+  <meta name="twitter:description" content="!! EDIT: Same as meta description above." />
+  <meta name="twitter:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <!-- !! EDIT: update the title tag -->
+  <title>!! EDIT: Page Title — DC Beats</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+
+  <!-- Performance hints -->
+  <link rel="dns-prefetch"  href="https://fonts.googleapis.com" />
+  <meta name="theme-color" content="#0a0a0a" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
+
+  <!--
+    If this page needs a dedicated stylesheet, create  css/your-page.css
+    and uncomment the line below:
+  -->
+  <!-- <link rel="stylesheet" href="../css/your-page.css" /> -->
+</head>
+
+<body>
+
+  <!-- Navigation — injected by js/site.js -->
+  <nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+
+  <!-- ============================================================
+       PAGE HERO
+       Use the breadcrumb to show where this page sits in the
+       site hierarchy. The waveform background is optional —
+       remove the mx-hero-bg block if you want a plain dark hero.
+  ============================================================ -->
+  <div class="mx-hero">
+    <div class="mx-hero-bg" aria-hidden="true">
+      <div class="mx-wave-bars">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="mx-hero-overlay" aria-hidden="true"></div>
+
+    <div class="container mx-hero-content">
+
+      <!-- Breadcrumb — update the last <span> with this page's name -->
+      <div class="mx-breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#services">Services</a>
+        <span>/</span>
+        <span>!! EDIT: Page Name</span>
+      </div>
+
+      <!-- !! EDIT: main headline -->
+      <h1 class="mx-hero-title">
+        Page<br>
+        <span class="mx-hero-accent">Title.</span>
+      </h1>
+
+      <!-- !! EDIT: 1–2 sentence description -->
+      <p class="mx-hero-sub">
+        Short description of this page and what the visitor will find here.
+      </p>
+
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       PAGE CONTENT
+       Add your sections here. Copy section patterns from
+       mixing-mastering.html (mx-services, mx-process, etc.)
+       or build your own using the existing CSS classes.
+  ============================================================ -->
+  <section>
+    <div class="container">
+
+      <!-- !! EDIT: replace with actual content -->
+      <p>Page content goes here.</p>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CONTACT CTA
+       Keep this at the bottom of every service page.
+       Links to the contact section on the homepage.
+  ============================================================ -->
+  <section class="mx-contact" id="contact-cta">
+    <div class="container">
+      <div class="mx-contact-inner reveal">
+        <div class="mx-contact-text">
+          <!-- !! EDIT: customise the CTA headline if needed -->
+          <h2>Ready to level up<br><span style="color: var(--gold);">your sound?</span></h2>
+          <p>Tell me about your project and I'll come back with a quote within 24 hours.</p>
+        </div>
+        <div class="mx-contact-action">
+          <a href="../index.html#contact" class="btn btn-primary" style="font-size: 0.85rem; padding: 1rem 2.2rem;">
+            Get in Touch <span class="btn-arrow">→</span>
+          </a>
+          <p class="mx-contact-note">Or email directly: <a href="mailto:info@dcbeats.net">info@dcbeats.net</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Footer — injected by js/site.js -->
+  <footer id="footer"></footer>
+
+  <!-- ============================================================
+       SCRIPTS
+       Do not change the order — site.js must run first.
+  ============================================================ -->
+  <script src="../js/site.js"></script>
+  <script src="../js/cookies.js"></script>
+  <script src="../js/remote-config.js"></script>
+  <script src="../js/main.js"></script>
+
+</body>
+</html>

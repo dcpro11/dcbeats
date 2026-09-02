@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Release Timeline Generator — DC Beats</title>
+  <meta name="description" content="Plan your music release with a backwards timeline. Enter your release date and get every deadline — DSP submission, Spotify editorial pitch, social announcements and more." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/release-timeline.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/release-timeline.html" />
+  <meta property="og:title"       content="Music Release Timeline Generator — DC Beats" />
+  <meta property="og:description" content="Free music release planner. Enter your release date and get a personalised backwards timeline with every deadline." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Music Release Timeline Generator — DC Beats" />
+  <meta name="twitter:description" content="Plan your release. Get every deadline auto-calculated from your release date." />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
+
+  <style>
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #161616;
+      --border:    #1e1e1e;
+      --border-mid:#2a2a2a;
+      --gold:      #c8a96e;
+      --gold-dim:  #7a6440;
+      --text:      #e8e4dc;
+      --muted:     #6b6560;
+      --green:     #4caf7d;
+      --yellow:    #e0a030;
+      --red:       #e05a5a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+
+    .tool-wrap { max-width: 680px; margin: 0 auto; padding: 96px 24px 80px; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 40px; transition: color 0.2s; }
+    .tool-back:hover { color: var(--gold); }
+
+    .tool-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 12px; }
+
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: var(--text); margin-bottom: 12px; }
+    h1 span { color: var(--gold); }
+
+    .tool-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 48px; }
+
+    /* ── FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field.full { grid-column: 1 / -1; }
+
+    .field-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
+    .field-input, .field-select {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .field-input:focus, .field-select:focus { border-color: var(--gold-dim); }
+    .field-select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    .field-select option { background: #1a1a1a; }
+
+    .gen-btn { width: 100%; padding: 16px; background: var(--gold); border: none; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #0a0a0a; cursor: pointer; transition: background 0.2s, transform 0.15s; margin-bottom: 48px; }
+    .gen-btn:hover { background: #dbb97e; }
+    .gen-btn:active { transform: scale(0.99); }
+
+    /* ── RESULTS ── */
+    .results { display: none; }
+    .results.visible { display: block; animation: fadeUp 0.4s ease both; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .results-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border-mid), transparent); margin-bottom: 36px; }
+
+    .release-banner {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .release-banner-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 4px; }
+    .release-banner-date { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--gold); }
+    .release-banner-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+
+    .copy-btn { background: none; border: 1px solid var(--border-mid); border-radius: 6px; padding: 8px 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: border-color 0.2s, color 0.2s; flex-shrink: 0; }
+    .copy-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); }
+
+    /* Timeline */
+    .timeline { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 100px 24px 1fr;
+      align-items: start;
+      gap: 0 14px;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    .tl-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      padding-top: 4px;
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    .tl-date.today { color: var(--gold); }
+    .tl-date.overdue { color: var(--red); }
+
+    .tl-spine {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tl-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--border-mid);
+      background: var(--surface2);
+      flex-shrink: 0;
+      margin-top: 6px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .tl-dot.done     { border-color: var(--green);  background: var(--green); }
+    .tl-dot.active   { border-color: var(--gold);   background: var(--gold); box-shadow: 0 0 0 3px rgba(200,169,110,0.2); }
+    .tl-dot.upcoming { border-color: var(--border-mid); background: var(--surface2); }
+    .tl-dot.overdue  { border-color: var(--red);    background: var(--red); }
+
+    .tl-line {
+      width: 1px;
+      flex: 1;
+      min-height: 32px;
+      background: var(--border);
+    }
+
+    .timeline-item:last-child .tl-line { display: none; }
+
+    .tl-content {
+      padding-bottom: 24px;
+    }
+
+    .tl-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .tl-title.done { color: var(--muted); text-decoration: line-through; }
+    .tl-title.overdue { color: var(--red); }
+    .tl-title.active  { color: var(--gold); }
+
+    .tl-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+    .tl-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-bottom: 4px;
+    }
+
+    .tl-badge.done     { background: rgba(76,175,125,0.12); color: var(--green); }
+    .tl-badge.active   { background: rgba(200,169,110,0.12); color: var(--gold); }
+    .tl-badge.upcoming { background: var(--surface2); color: var(--muted); }
+    .tl-badge.overdue  { background: rgba(224,90,90,0.12); color: var(--red); }
+
+    .results-note { font-size: 0.75rem; color: var(--muted); line-height: 1.6; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; animation: fadeUp 0.4s 0.2s ease both; }
+
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-field.full { grid-column: 1; }
+      .timeline-item { grid-template-columns: 80px 20px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<div class="tool-wrap">
+
+  <a href="tools.html" class="tool-back">← Tools</a>
+
+  <p class="tool-label">// Artist Tool</p>
+  <h1>Release <span>Timeline</span><br>Generator</h1>
+  <p class="tool-sub">Enter your release date and get a personalised backwards timeline — every deadline auto-calculated so nothing slips through the cracks.</p>
+
+  <!-- FORM -->
+  <div class="form-grid">
+    <div class="form-field full">
+      <label class="field-label" for="release-date">Release date</label>
+      <input class="field-input" type="date" id="release-date" />
+    </div>
+    <div class="form-field">
+      <label class="field-label" for="release-type">Release type</label>
+      <select class="field-select" id="release-type">
+        <option value="single">Single</option>
+        <option value="ep">EP</option>
+        <option value="album">Album</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label class="field-label" for="distributor">Distributor</label>
+      <select class="field-select" id="distributor">
+        <option value="distrokid">DistroKid</option>
+        <option value="tunecore">TuneCore</option>
+        <option value="cdbaby">CD Baby</option>
+        <option value="other">Other / Unknown</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="gen-btn">Generate Timeline →</button>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="results-divider"></div>
+
+    <div class="release-banner">
+      <div>
+        <p class="release-banner-label">// Release date</p>
+        <p class="release-banner-date" id="banner-date"></p>
+        <p class="release-banner-meta" id="banner-meta"></p>
+      </div>
+      <button class="copy-btn" id="copy-btn">Copy as text</button>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+
+    <p class="results-note">
+      Deadlines are approximate. Spotify editorial pitch should be submitted via Spotify for Artists. DSP delivery times vary by distributor — always check your distributor's current guidelines before submitting.
+    </p>
+  </div>
+
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var DSP_DAYS = { distrokid: 2, tunecore: 5, cdbaby: 7, other: 7 };
+
+  function getTasks(releaseDate, type, dist) {
+    var dsp = DSP_DAYS[dist] || 7;
+    var isAlbum = type === 'album';
+    var isEP    = type === 'ep';
+
+    // Days before release (negative = before, 0 = day of)
+    var tasks = [
+      { days: -(isAlbum ? 42 : 28), key: 'editorial',  title: 'Pitch to Spotify editorial',     desc: 'Submit your track via Spotify for Artists → Upcoming. This is the window for editorial playlist consideration.' },
+      { days: -(isAlbum ? 21 : 14), key: 'promo',      title: 'Plan promotion strategy',         desc: 'Confirm visuals, video shoot dates, press angles, and any paid advertising budget.' },
+      { days: -(dsp + 3),           key: 'dsp',         title: 'Submit to ' + dist.charAt(0).toUpperCase() + dist.slice(1), desc: 'Upload audio, artwork and metadata. Allow ' + dsp + ' business days for DSP processing.' },
+      { days: -10,                  key: 'artwork',     title: 'Artwork & metadata finalized',    desc: 'Cover art (3000×3000px), track title, ISRC, genre, BPM and all credits ready to go.' },
+      { days: -7,                   key: 'announce',    title: 'Official announcement',           desc: 'Post across social media, update your bio link, and notify your email list.' },
+      { days: -5,                   key: 'presave',     title: 'Pre-save campaign live',          desc: 'Activate pre-save link (DistroKid Presave, Toneden, etc.) and start driving saves.' },
+      { days: -3,                   key: 'content',     title: 'Content batch ready',             desc: 'Short-form video (Reels/TikTok), lyric snippets, and story assets scheduled or ready to post.' },
+      { days: -1,                   key: 'eve',         title: 'Release eve check',               desc: 'Verify DSP links are live on DistroKid/dashboard, confirm release date, prepare midnight posts.' },
+      { days: 0,                    key: 'release',     title: 'Release Day 🎉',                  desc: 'Share everywhere. Reply to comments and DMs. Pitch to playlist curators via SubmitHub or direct.' },
+      { days: 7,                    key: 'followup',    title: 'First week follow-up',            desc: 'Check Spotify for Artists stats, pitch to blog curators, share streaming links and milestones.' },
+    ];
+
+    if (isEP || isAlbum) {
+      tasks.splice(1, 0, { days: -(isAlbum ? 56 : 35), key: 'press', title: 'Send press / promo copies', desc: 'Share advance copies with blogs, playlist curators and press contacts under embargo.' });
+    }
+
+    return tasks;
+  }
+
+  function addDays(date, days) {
+    var d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+  }
+
+  function fmtDate(d) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  }
+
+  function fmtDateShort(d) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function getStatus(taskDate, releaseDate) {
+    var today = new Date(); today.setHours(0,0,0,0);
+    var t = new Date(taskDate); t.setHours(0,0,0,0);
+    var r = new Date(releaseDate); r.setHours(0,0,0,0);
+    if (t < today)    return 'done';
+    if (t.getTime() === today.getTime()) return 'active';
+    if (t > r)        return 'upcoming';
+    if (t >= today)   return 'upcoming';
+    return 'done';
+  }
+
+  document.getElementById('gen-btn').addEventListener('click', function () {
+    var dateVal = document.getElementById('release-date').value;
+    if (!dateVal) { alert('Please select a release date.'); return; }
+
+    var releaseDate = new Date(dateVal + 'T12:00:00');
+    var type        = document.getElementById('release-type').value;
+    var dist        = document.getElementById('distributor').value;
+
+    // Banner
+    var today = new Date(); today.setHours(0,0,0,0);
+    var rDay  = new Date(releaseDate); rDay.setHours(0,0,0,0);
+    var diff  = Math.round((rDay - today) / 86400000);
+    document.getElementById('banner-date').textContent = fmtDate(releaseDate);
+    document.getElementById('banner-meta').textContent =
+      type.charAt(0).toUpperCase() + type.slice(1) + ' · ' +
+      (diff > 0 ? diff + ' day' + (diff !== 1 ? 's' : '') + ' from today' :
+       diff === 0 ? 'Today!' : Math.abs(diff) + ' days ago');
+
+    // Timeline
+    var tasks   = getTasks(releaseDate, type, dist);
+    var tl      = document.getElementById('timeline');
+    tl.innerHTML = '';
+
+    var textLines = ['RELEASE TIMELINE — ' + fmtDate(releaseDate).toUpperCase(), ''];
+
+    tasks.forEach(function (task, i) {
+      var taskDate = addDays(releaseDate, task.days);
+      var status   = getStatus(taskDate, releaseDate);
+      if (task.days === 0) status = rDay < today ? 'done' : rDay.getTime() === today.getTime() ? 'active' : 'upcoming';
+
+      var item = document.createElement('div');
+      item.className = 'timeline-item';
+      item.style.animationDelay = (i * 0.05) + 's';
+
+      var dateClass = status === 'active' ? 'today' : status === 'overdue' ? 'overdue' : '';
+      var badgeTxt  = status === 'done' ? 'Done' : status === 'active' ? 'Today' : status === 'overdue' ? 'Overdue' : 'Upcoming';
+
+      item.innerHTML =
+        '<div class="tl-date ' + dateClass + '">' + fmtDateShort(taskDate) + '</div>' +
+        '<div class="tl-spine"><div class="tl-dot ' + status + '"></div><div class="tl-line"></div></div>' +
+        '<div class="tl-content">' +
+          '<span class="tl-badge ' + status + '">' + badgeTxt + '</span>' +
+          '<p class="tl-title ' + status + '">' + task.title + '</p>' +
+          '<p class="tl-desc">'  + task.desc  + '</p>' +
+        '</div>';
+
+      tl.appendChild(item);
+      textLines.push(fmtDate(taskDate) + ' — ' + task.title);
+      textLines.push('  ' + task.desc);
+      textLines.push('');
+    });
+
+    // Copy button
+    var copyBtn = document.getElementById('copy-btn');
+    copyBtn.addEventListener('click', function () {
+      navigator.clipboard.writeText(textLines.join('\n')).then(function () {
+        copyBtn.textContent = '✓ Copied';
+        copyBtn.classList.add('copied');
+        setTimeout(function () { copyBtn.textContent = 'Copy as text'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    });
+
+    var results = document.getElementById('results');
+    results.classList.add('visible');
+    results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  // Default date: 4 weeks from today
+  var def = new Date();
+  def.setDate(def.getDate() + 28);
+  document.getElementById('release-date').value = def.toISOString().slice(0, 10);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Music Production Tools — DC Beats</title>
+  <meta name="description" content="Free browser-based music production tools by DC Beats. BPM & Key Finder, Loudness Analyzer and more — no upload required, everything runs locally." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/tools.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/tools.html" />
+  <meta property="og:title"       content="Free Music Production Tools — DC Beats" />
+  <meta property="og:description" content="Free browser-based tools for producers and artists. BPM & Key Finder, Loudness Analyzer — no upload, runs locally." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta property="og:locale"      content="en_US" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Free Music Production Tools — DC Beats" />
+  <meta name="twitter:description" content="Free browser-based music production tools. No upload required." />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
+
+  <style>
+    /* Force nav visible — no hero on this page */
+    #nav {
+      background: rgba(10, 10, 10, 0.96) !important;
+      border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+    }
+    #nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: -1;
+    }
+
+    .tools-hero {
+      padding: calc(var(--nav-height) + 3rem) 0 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .tools-hero .breadcrumb {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .tools-hero .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .tools-hero .breadcrumb a:hover { color: var(--gold); }
+    .tools-hero .breadcrumb .sep { margin: 0 0.5em; opacity: 0.35; }
+    .tools-hero .section-label { margin-bottom: 1rem; }
+    .tools-hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+    .tools-hero h1 span { color: var(--gold); }
+    .tools-hero-sub { margin-top: 1rem; color: var(--text-muted); font-size: 0.95rem; max-width: 520px; line-height: 1.65; }
+    .tools-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); background: rgba(200,169,110,0.08); border: 1px solid rgba(200,169,110,0.2); border-radius: 2px; padding: 0.3rem 0.75rem; margin-top: 1.5rem; }
+
+    .tools-section { padding: 4rem 0 6rem; }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,169,110,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .tool-card:hover {
+      border-color: rgba(200,169,110,0.4);
+      background: var(--surface2, #161616);
+      transform: translateY(-2px);
+    }
+
+    .tool-card-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .tool-card:hover .tool-card-icon { border-color: rgba(200,169,110,0.4); }
+    .tool-card-icon svg { width: 20px; height: 20px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .tool-card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+    .tool-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary, #e8e4dc);
+      margin-top: 0.2rem;
+    }
+    .tool-card-desc {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .tool-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+    }
+    .tool-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: var(--surface2, #161616);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.2rem 0.6rem;
+    }
+    .tool-card-arrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.2s;
+      align-self: flex-end;
+    }
+    .tool-card:hover .tool-card-arrow { opacity: 1; }
+
+    .tool-card--coming {
+      opacity: 0.45;
+      pointer-events: none;
+      cursor: default;
+    }
+    .tool-card--coming:hover { transform: none; border-color: var(--border); background: var(--surface); }
+
+    .tools-coming-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<section class="tools-hero">
+  <div class="container">
+    <p class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span>Tools</p>
+    <div class="section-label"><span class="label">Free Tools</span></div>
+    <h1>Production <span>Tools</span>.</h1>
+    <p class="tools-hero-sub">Browser-based utilities for producers and artists. Everything runs locally — no account, no upload, no limits.</p>
+    <span class="tools-badge">// 100% client-side · private · free</span>
+  </div>
+</section>
+
+<section class="tools-section">
+  <div class="container">
+
+    <div class="tools-grid">
+
+      <a href="bpm-key-finder.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <p class="tool-card-label">// tempo &amp; key</p>
+          <p class="tool-card-title">BPM &amp; Key Finder</p>
+        </div>
+        <p class="tool-card-desc">Detect the tempo (BPM) and musical key of any audio file. Shows Camelot wheel position and harmonically compatible keys. Drop a file — results in seconds.</p>
+        <div class="tool-card-tags">
+          <span class="tool-tag">MP3</span>
+          <span class="tool-tag">WAV</span>
+          <span class="tool-tag">FLAC</span>
+          <span class="tool-tag">OGG</span>
+        </div>
+        <span class="tool-card-arrow">Open →</span>
+      </a>
+
+      <a href="loudness-analyzer.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+          <p class="tool-card-label">// mastering</p>
+          <p class="tool-card-title">Loudness Analyzer</p>
+        </div>
+        <p class="tool-card-desc">Measure Integrated LUFS, True Peak, Momentary Max and LU Range. Compares your track against Spotify, YouTube, Apple Music, SoundCloud, Tidal and Amazon Music targets.</p>
+        <div class="tool-card-tags">
+          <span class="tool-tag">LUFS</span>
+          <span class="tool-tag">True Peak</span>
+          <span class="tool-tag">EBU R128</span>
+        </div>
+        <span class="tool-card-arrow">Open →</span>
+      </a>
+
+      <a href="streaming-revenue.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <p class="tool-card-label">// income</p>
+          <p class="tool-card-title">Streaming Revenue Calculator</p>
+        </div>
+        <p class="tool-card-desc">Enter your stream counts per platform and get estimated earnings across Spotify, Apple Music, TIDAL, YouTube Music and more — plus your beat purchase breakeven point.</p>
+        <div class="tool-card-tags">
+          <span class="tool-tag">Spotify</span>
+          <span class="tool-tag">Apple Music</span>
+          <span class="tool-tag">TIDAL</span>
+          <span class="tool-tag">+5</span>
+        </div>
+        <span class="tool-card-arrow">Open →</span>
+      </a>
+
+      <a href="release-timeline.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <p class="tool-card-label">// planning</p>
+          <p class="tool-card-title">Release Timeline Generator</p>
+        </div>
+        <p class="tool-card-desc">Enter your release date and get a personalised backwards timeline — DSP submission, Spotify editorial pitch, pre-save, social announcements and more, all auto-calculated.</p>
+        <div class="tool-card-tags">
+          <span class="tool-tag">Single</span>
+          <span class="tool-tag">EP</span>
+          <span class="tool-tag">Album</span>
+        </div>
+        <span class="tool-card-arrow">Open →</span>
+      </a>
+
+      <a href="song-structure.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div>
+          <p class="tool-card-label">// arrangement</p>
+          <p class="tool-card-title">Song Structure Planner</p>
+        </div>
+        <p class="tool-card-desc">Build your arrangement visually. Add sections (Intro, Verse, Chorus, Bridge…), set bar counts and BPM — total track duration updates in real time. Copy as text when done.</p>
+        <div class="tool-card-tags">
+          <span class="tool-tag">Arrangement</span>
+          <span class="tool-tag">BPM</span>
+          <span class="tool-tag">Bars</span>
+        </div>
+        <span class="tool-card-arrow">Open →</span>
+      </a>
+
+<a href="chord-progression.html" class="tool-card">
+        <div class="tool-card-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div>
+          <p class="tool-card-label">// music theory</p>
+          <p class="tool-card-title">Chord Progression Generator</p>
+        </div>
+        <p class="tool-card-desc">Generate chord progressions by key, scale and genre — Pop, Hip-Hop, R&amp;B, Jazz, Latin, Rock. Preview chords in the browser and export as a MIDI file.</p>
+        <div class="tool-card-tags">
+          <span class="tool-tag">MIDI</span>
+          <span class="tool-tag">Chords</span>
+          <span class="tool-tag">Scales</span>
+        </div>
+        <span class="tool-card-arrow">Open →</span>
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="DC Beats Privacy Policy — How we collect, use and protect your personal data." />
+  <meta name="description" content="DC Beats Privacy Policy — How we collect, use and protect your personal data in compliance with GDPR." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/privacy-policy.html" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
   <title>Privacy Policy — DC Beats</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,31 +17,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
   <link rel="stylesheet" href="../css/policy.css" />
 </head>
 
 <body class="policy-page">
 
-  <!-- ============================================================
-       NAVIGATION (same as main site)
-  ============================================================ -->
-  <nav id="nav" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <a href="../index.html" class="nav-logo" aria-label="DC Beats — Home">
-        <img src="../assets/logo.png" alt="DC Beats" />
-      </a>
-      <ul class="nav-links" role="list">
-        <li><a href="../index.html#beats">Beats</a></li>
-        <li><a href="../index.html#licensing">Licensing</a></li>
-        <li><a href="../index.html#services">Services</a></li>
-        <li><a href="../index.html#contact">Contact</a></li>
-        <li><a href="../index.html#beats" class="nav-cta">Shop Now</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+  <!-- Navigation — injected by js/site.js -->
+  <nav id="nav" role="navigation" aria-label="Main navigation"></nav>
 
 
   <!-- ============================================================
@@ -102,7 +91,7 @@
             <p>Data Controller:</p>
             <p><strong>DC Beats</strong><br />
             Portugal, European Union<br />
-            <a href="mailto:contact@dcbeats.net">contact@dcbeats.net</a></p>
+            <a href="mailto:info@dcbeats.net">info@dcbeats.net</a></p>
           </div>
         </div>
 
@@ -284,7 +273,7 @@
             <li><strong>Right to Object</strong> — Object to processing based on legitimate interest, including direct marketing.</li>
             <li><strong>Right to Withdraw Consent</strong> — Withdraw consent for cookies or marketing at any time without affecting prior lawful processing.</li>
           </ul>
-          <p>To exercise any of these rights, contact me at <a href="mailto:contact@dcbeats.net" style="color: var(--gold);">contact@dcbeats.net</a>. I will respond within 30 days. You also have the right to lodge a complaint with the Portuguese data protection authority (<a href="https://www.cnpd.pt" target="_blank" rel="noopener" style="color: var(--gold);">CNPD</a>) or your local supervisory authority.</p>
+          <p>To exercise any of these rights, contact me at <a href="mailto:info@dcbeats.net" style="color: var(--gold);">info@dcbeats.net</a>. I will respond within 30 days. You also have the right to lodge a complaint with the Portuguese data protection authority (<a href="https://www.cnpd.pt" target="_blank" rel="noopener" style="color: var(--gold);">CNPD</a>) or your local supervisory authority.</p>
         </div>
 
         <!-- 10. Children's Privacy -->
@@ -308,7 +297,7 @@
           <p>For any questions about this Privacy Policy or to exercise your data rights, please get in touch:</p>
           <div class="policy-contact-box">
             <p><strong>DC Beats</strong></p>
-            <p>Email: <a href="mailto:contact@dcbeats.net">contact@dcbeats.net</a></p>
+            <p>Email: <a href="mailto:info@dcbeats.net">info@dcbeats.net</a></p>
             <p>Response time: within 30 days as required by GDPR</p>
           </div>
         </div>
@@ -345,46 +334,12 @@
   </div>
 
 
-  <!-- ============================================================
-       FOOTER (same as main site)
-  ============================================================ -->
-  <footer id="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div>
-          <a href="../index.html" class="footer-logo"><img src="../assets/logo.png" alt="DC Beats" /></a>
-          <p class="footer-tagline">Premium Instrumentals · Portugal</p>
-        </div>
-        <nav class="footer-nav" aria-label="Footer navigation">
-          <div class="footer-nav-col">
-            <h4>Store</h4>
-            <ul>
-              <li><a href="../index.html#beats">Browse Beats</a></li>
-              <li><a href="../index.html#licensing">Licensing</a></li>
-            </ul>
-          </div>
-          <div class="footer-nav-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><a href="privacy-policy.html">Privacy Policy</a></li>
-              <li><a href="terms-of-use.html">Terms of Use</a></li>
-              <li><a href="refund-policy.html">Refund Policy</a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="footer-bottom">
-        <p class="footer-copy">&copy; <span id="year"></span> DC Beats. All rights reserved.</p>
-        <div class="footer-social">
-          <a href="https://instagram.com/dcbeats" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://youtube.com/@dcbeats" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://www.beatstars.com/dcbeats" target="_blank" rel="noopener">BeatStars</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- Footer — injected by js/site.js -->
+  <footer id="footer"></footer>
 
+  <script src="../js/site.js"></script>
+  <script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
   <script src="../js/main.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

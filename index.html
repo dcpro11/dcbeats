@@ -4,7 +4,7 @@
   <!-- Primary SEO -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="DC Beats — Premium beats for artists and creators. Pop, Trap, Rap, Rock, Afro type beats. Free downlaod available and instant delivery" />
+  <meta name="description" content="DC Beats — Premium beats for artists and creators. Pop, Trap, Rap, Rock, Afro type beats. Free download available and instant delivery." />
   <meta name="keywords" content="buy beats online, free type beats, pop type beats, rap type beats, trap type beats, free beats, beatmaker, custom beats, mixing and mastering, mixing vocals, mixing beats, DC Beats, producer Portugal" />
   <meta name="author" content="DC Beats" />
   <meta name="robots" content="index, follow" />
@@ -14,14 +14,14 @@
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://dcbeats.net/" />
   <meta property="og:title"       content="DC Beats — Premium Beat Store" />
-  <meta property="og:description" content="DC Beats — Premium beats for artists and creators. Pop, Trap, Rap, Rock, Afro type beats. Free downlaod available and instant delivery" />
+  <meta property="og:description" content="DC Beats — Premium beats for artists and creators. Pop, Trap, Rap, Rock, Afro type beats. Free download available and instant delivery." />
   <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
   <meta property="og:locale"      content="en_US" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="DC Beats — Premium Beat Store" />
-  <meta name="twitter:description" content="DC Beats — Premium beats for artists and creators. Pop, Trap, Rap, Rock, Afro type beats. Free downlaod available and instant delivery" />
+  <meta name="twitter:description" content="DC Beats — Premium beats for artists and creators. Pop, Trap, Rap, Rock, Afro type beats. Free download available and instant delivery." />
   <meta name="twitter:image"       content="https://dcbeats.net/assets/og-image.jpg" />
 
   <title>DC Beats — Official Beat Store</title>
@@ -41,45 +41,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
 
-  <!-- reCAPTCHA v3 -->
-<script src="https://www.google.com/recaptcha/api.js?render=6LerMJwsAAAAAKG0FHNQ26-YhiKhEzF1IG3ygSBf"></script>
-  
-  <!-- Main stylesheet -->
-  <link rel="stylesheet" href="css/style.css" />
+  <!-- Performance: DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://www.google.com" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-  <!-- Cookie banner stylesheet -->
+  <!-- Mobile browser chrome colour -->
+  <meta name="theme-color" content="#0a0a0a" />
+
+  <!-- reCAPTCHA v3 — only needed on pages with the contact form -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LerMJwsAAAAAKG0FHNQ26-YhiKhEzF1IG3ygSBf" async defer></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/cookies.css" />
 </head>
 
 <body>
 
-  <!-- ============================================================
-       NAVIGATION
-       Fixed. Becomes frosted glass on scroll.
-       Logo: place your PNG at assets/logo.png
-  ============================================================ -->
-  <nav id="nav" role="navigation" aria-label="Main navigation">
-  <div class="container">
-
-    <a href="#hero" class="nav-logo" aria-label="DC Beats — Home">
-      <img src="assets/logo.png" alt="DC Beats" />
-    </a>
-
-    <ul class="nav-links" role="list">
-      <li><a href="#beats">Beats</a></li>
-      <li><a href="#licensing">Licensing</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#beats" class="nav-cta">Shop Now</a></li>
-    </ul>
-
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-
-  </div>
-</nav>
+  <!-- Navigation — injected by js/site.js -->
+  <nav id="nav" role="navigation" aria-label="Main navigation"></nav>
 
 
   <!-- ============================================================
@@ -155,21 +136,21 @@
     <div class="hero-stats-bar" aria-label="Highlights">
 
       <div class="hero-stat">
-        <span class="hero-stat-num">150<sup>+</sup></span>
+        <span class="hero-stat-num" data-stat="beatsAvailable">150<sup>+</sup></span>
         <span class="hero-stat-label">Beats Available</span>
       </div>
 
       <div class="hero-stat-divider" aria-hidden="true"></div>
 
       <div class="hero-stat">
-        <span class="hero-stat-num">10+</span>
+        <span class="hero-stat-num" data-stat="yearsExperience">10+</span>
         <span class="hero-stat-label">Years Experience</span>
       </div>
 
       <div class="hero-stat-divider" aria-hidden="true"></div>
 
       <div class="hero-stat">
-        <span class="hero-stat-num">120<sup>+</sup></span>
+        <span class="hero-stat-num" data-stat="artistsPurchased">120<sup>+</sup></span>
         <span class="hero-stat-label">Artists Purchased My Beats</span>
       </div>
 
@@ -204,6 +185,11 @@
 
       <div class="beats-header">
         <h2 class="reveal">Find your sound.</h2>
+      </div>
+
+      <!-- Beat Store CTA -->
+      <div class="beats-browse-cta reveal reveal-delay-1">
+        <a href="pages/beatstore.html" class="btn btn--primary">Open Store →</a>
       </div>
 
       <!-- ════════════════════════════════════════════════════
@@ -401,7 +387,7 @@
           <!-- Front view -->
           <div class="license-front">
             <div class="license-tier-label">Basic</div>
-            <div class="license-price">$29.99</div>
+            <div class="license-price" data-price="basic">$29.99</div>
             <div class="license-format">MP3 · 320kbps</div>
 
             <ul class="license-rights">
@@ -463,7 +449,7 @@
           <!-- Front view -->
           <div class="license-front">
             <div class="license-tier-label">Professional</div>
-            <div class="license-price">$59.99</div>
+            <div class="license-price" data-price="professional">$59.99</div>
             <div class="license-format">WAV + MP3 · Tracked Out Stems</div>
 
             <ul class="license-rights">
@@ -527,7 +513,7 @@
           <!-- Front view -->
           <div class="license-front">
             <div class="license-tier-label">Unlimited</div>
-            <div class="license-price">$99.99</div>
+            <div class="license-price" data-price="unlimited">$99.99</div>
             <div class="license-format">WAV + MP3 + Stems · Unlimited</div>
 
             <ul class="license-rights">
@@ -594,7 +580,7 @@
         <div class="license-front license-front--exclusive">
           <div class="license-exclusive-left">
             <div class="license-tier-label">Exclusive Rights</div>
-            <div class="license-price">From $299.99+</div>
+            <div class="license-price" data-price="exclusive">From $299.99+</div>
             <p class="license-exclusive-desc">
               Full ownership of the beat. Removed from the store permanently.
             </p>
@@ -697,7 +683,7 @@
               <br><br>Professional quality, fast turnaround —
               ready for streaming, radio and sync.
             </p>
-            <a href="#contact" class="service-cta">Get a quote →</a>
+            <a href="pages/mixing-mastering.html" class="service-cta">Learn more →</a>
           </div>
         </article>
 
@@ -739,7 +725,7 @@
 
         <!-- Photo placeholder -->
         <div class="about-photo-wrap">
-          <img src="assets/profile.jpeg" alt="DC Beats"/> 
+          <img src="assets/profile.jpeg" alt="David Cardoso — DC Beats" loading="lazy" />
           <!-- Photo placeholder -NO PHOTO -->
            <!-- <div class="about-photo-placeholder" aria-label="Profile photo placeholder">
             <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -905,7 +891,7 @@
 
             <a href="mailto:info@dcbeats.net" class="contact-link-item">
               <span class="label">Email</span>
-              <span class="contact-link-val">info@dcbeats.net</span>
+              <span class="contact-link-val" data-contact-email>info@dcbeats.net</span>
             </a>
 
             <a href="https://www.instagram.com/dcbeats.official" target="_blank" rel="noopener" class="contact-link-item">
@@ -975,185 +961,54 @@
   </section>
 
 
-  <!-- ============================================================
-       FOOTER
-  ============================================================ -->
-  <footer id="footer">
-    <div class="container">
+  <!-- Footer — injected by js/site.js -->
+  <footer id="footer"></footer>
 
-      <div class="footer-top">
-
-        <!-- Brand -->
-        <div>
-          <a href="#hero" class="footer-logo" aria-label="DC Beats — Home">
-            <img src="assets/logo.png" alt="DC Beats" />
-          </a>
-          <p class="footer-tagline">Industry Ready Beats · Portugal</p>
-        </div>
-
-        <!-- Navigation -->
-        <nav class="footer-nav" aria-label="Footer navigation">
-
-          <div class="footer-nav-col">
-            <h4>Store</h4>
-            <ul>
-              <li><a href="#beats">Browse Beats</a></li>
-              <li><a href="#">Licensing Info</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-nav-col">
-            <h4>Services</h4>
-            <ul>
-              <li><a href="#services">Custom Beats</a></li>
-              <li><a href="#services">Mixing &amp; Mastering</a></li>
-            </ul>
-          </div>
-
-          <div class="footer-nav-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><a href="pages/privacy-policy.html">Privacy Policy</a></li>
-              <li><a href="pages/terms-of-use.html">Terms of Use</a></li>
-              <li><a href="pages/refund-policy.html">Refund Policy</a></li>
-            </ul>
-          </div>
-
-        </nav>
-
-      </div>
-
-      <!-- Bottom bar -->
-      <div class="footer-bottom">
-        <button class="cookie-reopen-btn" aria-label="Manage cookie preferences">Cookie Preferences</button>
-        <p class="footer-copy">
-          &copy; <span id="year"></span> DC Beats. All rights reserved. <br> Website made with ❤️ by David Cardoso.
-        </p>
-        <div class="footer-social">
-          <a href="https://instagram.com/dcbeats.official" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.youtube.com/@DCBeatsOfficial" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://www.tiktok.com/@dc.beats" target="_blank" rel="noopener">TikTok</a>
-        </div>
-      </div>
-
-    </div>
-  </footer>
-
+  <!-- Toast notification for contact form -->
+  <div id="form-toast" aria-live="polite">
+    <span id="form-toast-msg"></span>
+  </div>
 
   <!-- ============================================================
        SCRIPTS
+       Load order matters:
+       1. site.js   — injects nav, footer, cookie banner
+       2. cookies.js — attaches cookie consent handlers
+       3. main.js   — attaches scroll, nav toggle, canvas, etc.
   ============================================================ -->
-  <!-- Cookie consent (must load before GTM) -->
+  <script src="js/site.js"></script>
   <script src="js/cookies.js"></script>
-  
-  <!-- ============================================================
-       COOKIE CONSENT BANNER — GDPR (EU)
-       Managed by js/cookies.js
-       Google Tag Manager loads ONLY after consent is granted.
-       Replace GTM-XXXXXXX in js/cookies.js with your GTM ID.
-  ============================================================ -->
-  <div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
-    <div class="cookie-inner">
+  <script src="js/remote-config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/free-beats-widget.js"></script>
+  <script src="js/social-proof.js"></script>
 
-      <div class="cookie-text">
-        <p>
-          We use cookies to improve your experience, analyse site traffic and serve relevant ads.
-          By clicking <strong style="color: #f0ece4;">Accept All</strong>, you consent to our use of
-          <a href="pages/privacy-policy.html#s6">Analytics and Advertising cookies</a>.
-          You can manage your preferences at any time.
-        </p>
-      </div>
-
-      <div class="cookie-actions">
-        <button id="cookie-accept-all">Accept All</button>
-        <button id="cookie-essential-only">Essential Only</button>
-        <button id="cookie-manage">Manage</button>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- Cookie Preferences Modal -->
-  <div id="cookie-modal" role="dialog" aria-modal="true" aria-label="Cookie preferences">
-    <div class="cookie-modal-box">
-
-      <h2 class="cookie-modal-title">Cookie Preferences</h2>
-      <p class="cookie-modal-desc">
-        Choose which cookies you allow. Essential cookies cannot be disabled as they are
-        required for the site to function. Your preferences are saved and can be changed at any time.
-      </p>
-
-      <!-- Essential (always on) -->
-      <div class="cookie-category">
-        <div class="cookie-category-info">
-          <h3>Essential <span class="cookie-required-badge">Always on</span></h3>
-          <p>Required for core site functionality — navigation, security and the store embed. No personal data collected.</p>
-        </div>
-        <label class="cookie-toggle" aria-label="Essential cookies — always enabled">
-          <input type="checkbox" checked disabled />
-          <span class="cookie-toggle-slider"></span>
-        </label>
-      </div>
-
-      <!-- Analytics -->
-      <div class="cookie-category">
-        <div class="cookie-category-info">
-          <h3>Analytics (Google Analytics)</h3>
-          <p>Helps understand how visitors use the site — pages visited, session duration and traffic sources. Data is anonymised.</p>
-        </div>
-        <label class="cookie-toggle" aria-label="Analytics cookies">
-          <input type="checkbox" id="toggle-analytics" />
-          <span class="cookie-toggle-slider"></span>
-        </label>
-      </div>
-
-      <!-- Advertising -->
-      <div class="cookie-category">
-        <div class="cookie-category-info">
-          <h3>Advertising (Google Ads)</h3>
-          <p>Used to measure ad campaign performance and show you relevant ads on other platforms. Managed via Google Tag Manager.</p>
-        </div>
-        <label class="cookie-toggle" aria-label="Advertising cookies">
-          <input type="checkbox" id="toggle-ads" />
-          <span class="cookie-toggle-slider"></span>
-        </label>
-      </div>
-
-    </div>
-  </div>
-      <!-- Toast notification -->
-      <div id="form-toast" aria-live="polite">
-        <span id="form-toast-msg"></span>
-      <script src="https://www.google.com/recaptcha/api.js?render=6LerMJwsAAAAAKG0FHNQ26-YhiKhEzF1IG3ygSBf"></script>
-      <script src="js/main.js"></script>
-
-      <!--Schema.org-->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MusicStore",
-  "name": "DC Beats",
-  "description": "Premium beats for artists and creators. Trap, drill, cinematic and beyond.",
-  "url": "https://dcbeats.net",
-  "logo": "https://dcbeats.net/assets/logo.png",
-  "image": "https://dcbeats.net/assets/og-image.jpg",
-  "address": {
-    "@type": "PostalAddress",
-    "addressCountry": "PT"
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "email": "info@dcbeats.net",
-    "contactType": "customer service"
-  },
-  "sameAs": [
-    "https://www.instagram.com/dcbeats.official",
-    "https://www.youtube.com/@DCBeatsOfficial",
-    "https://www.tiktok.com/dc.beats"
-  ]
-}
-</script>
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicStore",
+    "name": "DC Beats",
+    "description": "Premium beats for artists and creators. Trap, drill, cinematic and beyond.",
+    "url": "https://dcbeats.net",
+    "logo": "https://dcbeats.net/assets/logo.png",
+    "image": "https://dcbeats.net/assets/og-image.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "PT"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "info@dcbeats.net",
+      "contactType": "customer service"
+    },
+    "sameAs": [
+      "https://www.instagram.com/dcbeats.official",
+      "https://www.youtube.com/@DCBeatsOfficial",
+      "https://www.tiktok.com/@dc.beats"
+    ]
+  }
+  </script>
 
 </body>
 

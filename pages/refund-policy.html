@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="DC Beats Refund Policy — When and how refunds are issued for beat purchases." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/refund-policy.html" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
   <title>Refund Policy — DC Beats</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,29 +17,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
   <link rel="stylesheet" href="../css/policy.css" />
 </head>
 
 <body class="policy-page">
 
-  <!-- NAVIGATION -->
-  <nav id="nav" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <a href="../index.html" class="nav-logo" aria-label="DC Beats — Home">
-        <img src="../assets/logo.png" alt="DC Beats" />
-      </a>
-      <ul class="nav-links" role="list">
-        <li><a href="../index.html#beats">Beats</a></li>
-        <li><a href="../index.html#licensing">Licensing</a></li>
-        <li><a href="../index.html#services">Services</a></li>
-        <li><a href="../index.html#contact">Contact</a></li>
-        <li><a href="../index.html#beats" class="nav-cta">Shop Now</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+  <!-- Navigation — injected by js/site.js -->
+  <nav id="nav" role="navigation" aria-label="Main navigation"></nav>
 
 
   <!-- PAGE HERO -->
@@ -138,7 +129,7 @@
           <div class="policy-sub">
             <div class="policy-sub-item">
               <span class="policy-sub-letter">a.</span>
-              <div><p>Contact me within <strong>30 days</strong> of your purchase date at <a href="mailto:contact@dcbeats.net" style="color: var(--gold);">contact@dcbeats.net</a> with the subject line "Refund Request".</p></div>
+              <div><p>Contact me within <strong>30 days</strong> of your purchase date at <a href="mailto:info@dcbeats.net" style="color: var(--gold);">info@dcbeats.net</a> with the subject line "Refund Request".</p></div>
             </div>
             <div class="policy-sub-item">
               <span class="policy-sub-letter">b.</span>
@@ -238,7 +229,7 @@
           <p>For refund requests or questions about this policy:</p>
           <div class="policy-contact-box">
             <p><strong>DC Beats</strong></p>
-            <p>Email: <a href="mailto:contact@dcbeats.net">contact@dcbeats.net</a></p>
+            <p>Email: <a href="mailto:info@dcbeats.net">info@dcbeats.net</a></p>
             <p>Subject line: <em>"Refund Request — [Beat Name]"</em></p>
             <p>Response time: within 3 business days</p>
           </div>
@@ -274,44 +265,12 @@
   </div>
 
 
-  <!-- FOOTER -->
-  <footer id="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div>
-          <a href="../index.html" class="footer-logo"><img src="../assets/logo.png" alt="DC Beats" /></a>
-          <p class="footer-tagline">Premium Instrumentals · Portugal</p>
-        </div>
-        <nav class="footer-nav" aria-label="Footer navigation">
-          <div class="footer-nav-col">
-            <h4>Store</h4>
-            <ul>
-              <li><a href="../index.html#beats">Browse Beats</a></li>
-              <li><a href="../index.html#licensing">Licensing</a></li>
-            </ul>
-          </div>
-          <div class="footer-nav-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><a href="privacy-policy.html">Privacy Policy</a></li>
-              <li><a href="terms-of-use.html">Terms of Use</a></li>
-              <li><a href="refund-policy.html">Refund Policy</a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="footer-bottom">
-        <p class="footer-copy">&copy; <span id="year"></span> DC Beats. All rights reserved.</p>
-        <div class="footer-social">
-          <a href="https://instagram.com/dcbeats" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://youtube.com/@dcbeats" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://www.beatstars.com/dcbeats" target="_blank" rel="noopener">BeatStars</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <!-- Footer — injected by js/site.js -->
+  <footer id="footer"></footer>
 
+  <script src="../js/site.js"></script>
+  <script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
   <script src="../js/main.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

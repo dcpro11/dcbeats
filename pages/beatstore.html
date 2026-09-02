@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beat Store — DC Beats</title>
+  <meta name="description" content="Browse and buy industry-ready beats by DC Beats. Filter by genre — Pop, Trap, R&B, Rock — and find your perfect sound." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/beatstore.html" />
+
+  <!-- OG / Twitter -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/beatstore.html" />
+  <meta property="og:title"       content="Beat Store — DC Beats" />
+  <meta property="og:description" content="Browse and buy industry-ready beats. Filter by genre — the player updates instantly." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta property="og:locale"      content="en_US" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Beat Store — DC Beats" />
+  <meta name="twitter:description" content="Browse and buy industry-ready beats by DC Beats." />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="//www.beatstars.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
+
+  <style>
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #161616;
+      --border:    #222222;
+      --gold:      #c8a96e;
+      --gold-bright: #e0c078;
+      --gold-dim:  #7a6440;
+      --text:      #e8e4dc;
+      --muted:     #6b6560;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HERO STRIP ── */
+    .page-hero {
+      padding-top: 120px;
+      padding-bottom: 48px;
+      text-align: center;
+    }
+
+    .page-hero .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .page-hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      color: var(--text);
+    }
+
+    .page-hero h1 span { color: var(--gold); }
+
+    .page-hero .sub {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── WRAPPER ── */
+    .bs-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── FILTER CARDS GRID ── */
+    .filter-section { margin-bottom: 52px; }
+
+    .filter-section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── INDIVIDUAL CARD ── */
+    .filter-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 20px 22px;
+      cursor: pointer;
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      overflow: hidden;
+      text-align: center;
+      user-select: none;
+    }
+
+    .filter-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(200,169,110,0.08) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .filter-card:hover::before,
+    .filter-card.active::before { opacity: 1; }
+
+    .filter-card:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    .filter-card.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold), 0 8px 32px rgba(200,169,110,0.15);
+    }
+
+    .card-icon {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+      display: block;
+      line-height: 1;
+    }
+
+    .card-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+
+    .card-sub {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .card-active-dot {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.2s;
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    .filter-card.active .card-active-dot { opacity: 1; }
+
+    /* ── SEPARATOR ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 52px 0;
+    }
+
+    /* ── BEATSTORE EMBED ── */
+    .store-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .now-browsing {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .now-browsing-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+    }
+
+    .now-browsing-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .embed-wrapper {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--surface);
+      position: relative;
+      min-height: 500px;
+    }
+
+    .embed-wrapper iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      transition: opacity 0.3s;
+    }
+
+    .embed-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: var(--surface);
+      z-index: 5;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .embed-loader.hidden { opacity: 0; }
+
+    .loader-ring {
+      width: 36px; height: 36px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loader-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── LICENSING SECTION spacing ── */
+    .bs-licensing {
+      margin-top: 64px;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .tab-btn { padding: 8px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <p class="eyebrow">// Browse the catalog</p>
+  <h1>Find Your <span>Sound</span></h1>
+  <p class="sub">Filter by genre — the player updates instantly.</p>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="bs-wrap">
+
+  <!-- BULK DEAL -->
+  <div class="bulk-deal">
+    <div class="bulk-deal-left">
+      <span class="label">Bulk Deal</span>
+      <h3 class="bulk-deal-title">Buy 2 Get 2 Free</h3>
+      <p class="bulk-deal-sub">On all non-exclusive leases</p>
+    </div>
+    <div class="bulk-deal-steps">
+      <div class="bulk-step">
+        <span class="bulk-step-num">01</span>
+        <p>Add <strong>4 beats</strong> of the same license to the cart.</p>
+      </div>
+      <div class="bulk-step-arrow" aria-hidden="true">→</div>
+      <div class="bulk-step">
+        <span class="bulk-step-num">02</span>
+        <p>Proceed to <strong>checkout</strong> and follow the steps.</p>
+      </div>
+      <div class="bulk-step-arrow" aria-hidden="true">→</div>
+      <div class="bulk-step">
+        <span class="bulk-step-num">03</span>
+        <p>Discount applies <strong>automatically</strong> — no code needed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENRE FILTER -->
+  <div id="panel-genre" class="filter-section">
+    <p class="filter-section-title">// Select a genre</p>
+    <div class="cards-grid">
+
+      <div class="filter-card active"
+           data-url="https://player.beatstars.com/?storeId=152116"
+           data-label="All Beats">
+        <div class="card-active-dot"></div>
+        <span class="card-icon">🎵</span>
+        <div class="card-label">All Beats</div>
+        <div class="card-sub">Full catalog</div>
+      </div>
+
+      <div class="filter-card"
+           data-url="https://player.beatstars.com/?storeId=152116&metadata.genres=POP"
+           data-label="Pop">
+        <div class="card-active-dot"></div>
+        <span class="card-icon">✨</span>
+        <div class="card-label">Pop</div>
+        <div class="card-sub">Melodic & polished</div>
+      </div>
+
+      <div class="filter-card"
+           data-url="https://player.beatstars.com/?storeId=152116&metadata.genres=TRAP"
+           data-label="Trap / Rap">
+        <div class="card-active-dot"></div>
+        <span class="card-icon">🔩</span>
+        <div class="card-label">Trap / Rap</div>
+        <div class="card-sub">Hard 808s & hi-hats</div>
+      </div>
+
+      <div class="filter-card"
+           data-url="https://player.beatstars.com/?storeId=152116&metadata.genres=R%26B"
+           data-label="R&B">
+        <div class="card-active-dot"></div>
+        <span class="card-icon">🌙</span>
+        <div class="card-label">R&B</div>
+        <div class="card-sub">Smooth & soulful</div>
+      </div>
+
+      <div class="filter-card"
+           data-url="https://player.beatstars.com/?storeId=152116&metadata.genres=ROCK"
+           data-label="Rock">
+        <div class="card-active-dot"></div>
+        <span class="card-icon">⚡</span>
+        <div class="card-label">Rock</div>
+        <div class="card-sub">Guitar-driven energy</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- EMBED SECTION -->
+  <div class="store-section">
+    <div class="store-header">
+      <div class="now-browsing">
+        <span class="now-browsing-label">Now browsing →</span>
+        <span class="now-browsing-name" id="now-label">All Beats</span>
+      </div>
+    </div>
+
+    <div class="embed-wrapper">
+      <div class="embed-loader" id="embed-loader">
+        <div class="loader-ring"></div>
+        <span class="loader-text">Loading beats…</span>
+      </div>
+
+      <iframe
+        id="beats-embed"
+        src="https://player.beatstars.com/?storeId=152116"
+        width="100%"
+        height="600"
+        frameborder="0"
+        allow="autoplay"
+        title="DC Beats Store">
+      </iframe>
+    </div>
+  </div>
+
+  <!-- LICENSING -->
+  <div class="bs-licensing">
+
+    <div class="section-label">
+      <span class="label">Licensing</span>
+    </div>
+    <h2>Choose Your License.</h2>
+    <p style="margin-top:0.75rem; margin-bottom:var(--space-lg); color:var(--text-secondary, #a09890);">
+      Every purchase comes with a PDF license agreement.
+      Not sure which fits? <a href="mailto:info@dcbeats.net" style="color:var(--gold);">Get in touch.</a>
+    </p>
+
+    <div class="license-grid">
+
+      <!-- BASIC -->
+      <article class="license-card" data-license="basic">
+        <div class="license-front">
+          <div class="license-tier-label">Basic</div>
+          <div class="license-price">$29.99</div>
+          <div class="license-format">MP3 · 320kbps</div>
+          <ul class="license-rights">
+            <li class="right-yes">Up to 50,000 streams</li>
+            <li class="right-yes">Music videos (non-profit)</li>
+            <li class="right-yes">Free distribution</li>
+            <li class="right-yes">Radio broadcasting</li>
+            <li class="right-no">WAV stems included</li>
+            <li class="right-no">Unlimited distribution</li>
+            <li class="right-no">Profit from performances</li>
+            <li class="right-no">Content ID registration</li>
+          </ul>
+          <button class="license-more-btn" aria-expanded="false">
+            Learn More <span class="license-arrow">↓</span>
+          </button>
+        </div>
+        <div class="license-detail" hidden>
+          <button class="license-close-btn" aria-label="Close details">✕</button>
+          <div class="license-tier-label">Basic — Full Details</div>
+          <div class="license-detail-body">
+            <div class="license-detail-group">
+              <h4>Distribution</h4>
+              <p>Free distribution only. Up to 50,000 total streams across all platforms combined.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Music Videos</h4>
+              <p>Non-monetized music videos permitted. No YouTube monetization on the video.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Radio</h4>
+              <p>Radio broadcasting permitted on non-commercial stations only.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Credit</h4>
+              <p>Producer credit required: <em>"Prod. by DC Beats"</em> in title, description and credits.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>File Format</h4>
+              <p>MP3 at 320kbps. WAV tracked-out stems not included.</p>
+            </div>
+            <div class="license-detail-note">
+              This license is non-exclusive. The beat remains available for purchase by other artists.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROFESSIONAL -->
+      <article class="license-card license-card--featured" data-license="professional">
+        <div class="license-featured-badge">Most Popular</div>
+        <div class="license-front">
+          <div class="license-tier-label">Professional</div>
+          <div class="license-price">$59.99</div>
+          <div class="license-format">WAV + MP3 · Tracked Out Stems</div>
+          <ul class="license-rights">
+            <li class="right-yes">Up to 500,000 streams</li>
+            <li class="right-yes">Monetized music videos</li>
+            <li class="right-yes">Paid distribution</li>
+            <li class="right-yes">Commercial radio</li>
+            <li class="right-yes">WAV stems included</li>
+            <li class="right-yes">Live performances</li>
+            <li class="right-no">Unlimited distribution</li>
+            <li class="right-no">Content ID registration</li>
+          </ul>
+          <button class="license-more-btn" aria-expanded="false">
+            Learn More <span class="license-arrow">↓</span>
+          </button>
+        </div>
+        <div class="license-detail" hidden>
+          <button class="license-close-btn" aria-label="Close details">✕</button>
+          <div class="license-tier-label">Professional — Full Details</div>
+          <div class="license-detail-body">
+            <div class="license-detail-group">
+              <h4>Distribution</h4>
+              <p>Paid distribution on all major platforms. Up to 500,000 total streams.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Music Videos</h4>
+              <p>Fully monetized music videos permitted on YouTube and all platforms.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Radio</h4>
+              <p>Commercial and non-commercial radio broadcasting included.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Live Performances</h4>
+              <p>Live performances permitted, including ticketed shows and events.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>File Format</h4>
+              <p>WAV (24-bit) + MP3 (320kbps) + tracked-out stems included.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Credit</h4>
+              <p>Producer credit required: <em>"Prod. by DC Beats"</em> in title, description and all release credits.</p>
+            </div>
+            <div class="license-detail-note">
+              This license is non-exclusive. The beat remains available for purchase by other artists.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- UNLIMITED -->
+      <article class="license-card" data-license="unlimited">
+        <div class="license-front">
+          <div class="license-tier-label">Unlimited</div>
+          <div class="license-price">$99.99</div>
+          <div class="license-format">WAV + MP3 + Stems · Unlimited</div>
+          <ul class="license-rights">
+            <li class="right-yes">Unlimited streams</li>
+            <li class="right-yes">Monetized music videos</li>
+            <li class="right-yes">Unlimited distribution</li>
+            <li class="right-yes">Commercial radio</li>
+            <li class="right-yes">WAV stems included</li>
+            <li class="right-yes">Live performances</li>
+            <li class="right-yes">Profit from performances</li>
+            <li class="right-no">Content ID registration</li>
+          </ul>
+          <button class="license-more-btn" aria-expanded="false">
+            Learn More <span class="license-arrow">↓</span>
+          </button>
+        </div>
+        <div class="license-detail" hidden>
+          <button class="license-close-btn" aria-label="Close details">✕</button>
+          <div class="license-tier-label">Unlimited — Full Details</div>
+          <div class="license-detail-body">
+            <div class="license-detail-group">
+              <h4>Distribution</h4>
+              <p>Unlimited streams and sales on all platforms worldwide. No caps.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Music Videos</h4>
+              <p>Fully monetized music videos, unlimited views, on all platforms.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Radio &amp; Sync</h4>
+              <p>Unlimited commercial radio. Sync licensing for TV, film and ads permitted.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Live Performances</h4>
+              <p>Unlimited live performances including festivals, tours and ticketed events.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>File Format</h4>
+              <p>WAV (24-bit) + MP3 (320kbps) + full tracked-out stems.</p>
+            </div>
+            <div class="license-detail-group">
+              <h4>Credit</h4>
+              <p>Producer credit required: <em>"Prod. by DC Beats"</em> in title, description and all release credits.</p>
+            </div>
+            <div class="license-detail-note">
+              This license is non-exclusive. For full ownership, see the Exclusive license below.
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- EXCLUSIVE -->
+    <article class="license-card license-card--exclusive" data-license="exclusive" style="margin-top:var(--space-md);">
+      <div class="license-front license-front--exclusive">
+        <div class="license-exclusive-left">
+          <div class="license-tier-label">Exclusive Rights</div>
+          <div class="license-price">From $299.99+</div>
+          <p class="license-exclusive-desc">Full ownership of the beat. Removed from the store permanently.</p>
+        </div>
+        <div class="license-exclusive-right">
+          <ul class="license-rights license-rights--horizontal">
+            <li class="right-yes">100% ownership</li>
+            <li class="right-yes">Beat removed from store</li>
+            <li class="right-yes">Unlimited everything</li>
+            <li class="right-yes">WAV + MP3 + Stems</li>
+            <li class="right-yes">Sync &amp; TV licensing</li>
+            <li class="right-yes">Content ID registration</li>
+          </ul>
+          <button class="license-more-btn license-more-btn--gold" aria-expanded="false">
+            Learn More <span class="license-arrow">↓</span>
+          </button>
+        </div>
+      </div>
+      <div class="license-detail" hidden>
+        <button class="license-close-btn" aria-label="Close details">✕</button>
+        <div class="license-tier-label">Exclusive Rights — Full Details</div>
+        <div class="license-detail-body license-detail-body--cols">
+          <div class="license-detail-group">
+            <h4>Full Ownership</h4>
+            <p>Upon purchase, you receive 100% ownership of the master recording.</p>
+          </div>
+          <div class="license-detail-group">
+            <h4>Store Removal</h4>
+            <p>The beat is permanently removed from DC Beats' store and will never be leased to another artist.</p>
+          </div>
+          <div class="license-detail-group">
+            <h4>Distribution &amp; Streams</h4>
+            <p>Unlimited distribution, unlimited streams, unlimited sales. No caps, worldwide, forever.</p>
+          </div>
+          <div class="license-detail-group">
+            <h4>Sync &amp; Broadcast</h4>
+            <p>Full sync licensing rights for TV, film, advertising and any other media.</p>
+          </div>
+          <div class="license-detail-group">
+            <h4>Credit</h4>
+            <p>Producer credit required: <em>"Prod. by DC Beats"</em> in title and all release credits.</p>
+          </div>
+          <div class="license-detail-group">
+            <h4>File Format</h4>
+            <p>WAV (24-bit) + MP3 (320kbps) + full tracked-out stems delivered immediately.</p>
+          </div>
+        </div>
+        <div class="license-detail-note" style="margin-top:var(--space-md);">
+          Exclusive prices vary by beat. <a href="mailto:info@dcbeats.net" style="color:var(--gold);margin-left:0.4rem;">Contact to negotiate →</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/free-beats-widget.js"></script>
+<script>
+  // ── Card selection & embed swap ──
+  const embed    = document.getElementById('beats-embed');
+  const nowLabel = document.getElementById('now-label');
+  const loader   = document.getElementById('embed-loader');
+
+  function activateCard(card) {
+    document.querySelectorAll('.filter-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+
+    const url   = card.dataset.url;
+    const label = card.dataset.label;
+
+    nowLabel.textContent = label;
+
+    loader.classList.remove('hidden');
+    embed.style.opacity = '0.3';
+    embed.src = url;
+
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'filter_select', { filter_type: 'genre', filter_value: label });
+    }
+  }
+
+  embed.addEventListener('load', () => {
+    loader.classList.add('hidden');
+    embed.style.opacity = '1';
+  });
+
+  document.addEventListener('click', e => {
+    const card = e.target.closest('.filter-card');
+    if (card) activateCard(card);
+  });
+
+  setTimeout(() => { loader.classList.add('hidden'); embed.style.opacity = '1'; }, 3000);
+
+  // ── Pre-filter from homepage pill links (?genre=Pop) ──
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var genre  = params.get('genre');
+    if (genre) {
+      var card = document.querySelector('[data-url*="metadata.genres=' + genre.toUpperCase() + '"]');
+      if (!card) card = document.querySelector('[data-label="' + genre + '"]');
+      if (card) activateCard(card);
+    }
+  })();
+</script>
+</body>
+</html>

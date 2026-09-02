@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streaming Revenue Calculator — DC Beats</title>
+  <meta name="description" content="Calculate how much your streams are worth across Spotify, Apple Music, TIDAL, YouTube Music and more. See your estimated earnings and your beat breakeven point — free tool by DC Beats." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/streaming-revenue.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/streaming-revenue.html" />
+  <meta property="og:title"       content="Streaming Revenue Calculator — DC Beats" />
+  <meta property="og:description" content="Free streaming income calculator. Enter your streams per platform and see estimated earnings plus beat breakeven point." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Streaming Revenue Calculator — DC Beats" />
+  <meta name="twitter:description" content="How much are your streams worth? Calculate across 8 platforms instantly." />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
+
+  <style>
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #161616;
+      --border:    #1e1e1e;
+      --border-mid:#2a2a2a;
+      --gold:      #c8a96e;
+      --gold-dim:  #7a6440;
+      --gold-pale: rgba(200,169,110,0.08);
+      --text:      #e8e4dc;
+      --muted:     #6b6560;
+      --green:     #4caf7d;
+      --green-dim: rgba(76,175,125,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+
+    /* ── LAYOUT ── */
+    .tool-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 80px;
+    }
+
+    /* ── HEADER ── */
+    .tool-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      margin-bottom: 40px;
+      transition: color 0.2s;
+    }
+    .tool-back:hover { color: var(--gold); }
+
+    .tool-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .tool-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    /* ── PLATFORMS INPUT ── */
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .platform-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.2s;
+    }
+
+    .platform-row:focus-within { border-color: var(--border-mid); }
+
+    .platform-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      flex-shrink: 0;
+      width: 28px;
+      text-align: center;
+    }
+
+    .platform-info { flex: 1; min-width: 0; }
+
+    .platform-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .platform-rate {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .platform-input {
+      width: 90px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text);
+      text-align: right;
+      outline: none;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+
+    .platform-input::-webkit-inner-spin-button,
+    .platform-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    .platform-input:focus { border-color: var(--gold-dim); }
+
+    /* ── CALCULATE BUTTON ── */
+    .calc-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gold);
+      border: none;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0a0a0a;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-bottom: 48px;
+    }
+
+    .calc-btn:hover { background: #dbb97e; }
+    .calc-btn:active { transform: scale(0.99); }
+
+    /* ── RESULTS ── */
+    .results { display: none; }
+    .results.visible { display: block; animation: fadeUp 0.4s ease both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .results-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-mid), transparent);
+      margin-bottom: 36px;
+    }
+
+    /* Total earnings card */
+    .total-card {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .total-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .total-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 10px;
+    }
+
+    .total-amount {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .total-streams {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 8px;
+      letter-spacing: 0.06em;
+    }
+
+    /* Per-platform breakdown */
+    .breakdown-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .breakdown-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .breakdown-row {
+      display: grid;
+      grid-template-columns: 28px 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    .breakdown-icon { font-size: 1rem; text-align: center; }
+    .breakdown-name { font-size: 0.82rem; color: var(--text); }
+    .breakdown-streams { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); text-align: right; }
+    .breakdown-earn { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--gold); font-weight: 500; text-align: right; min-width: 64px; }
+
+    /* Breakeven section */
+    .breakeven-section {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+      animation: fadeUp 0.4s 0.1s ease both;
+    }
+
+    .breakeven-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 16px;
+    }
+
+    .breakeven-tiers {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .breakeven-tier {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tier-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      width: 90px;
+      flex-shrink: 0;
+    }
+
+    .tier-bar-wrap {
+      flex: 1;
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .tier-bar {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--gold);
+      transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0%;
+    }
+
+    .tier-bar.reached { background: var(--green); }
+
+    .tier-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      width: 88px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .tier-status.reached { color: var(--green); }
+
+    /* Disclaimer */
+    .results-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.6;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      animation: fadeUp 0.4s 0.15s ease both;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .platforms-grid { grid-template-columns: 1fr; }
+      .platform-input { width: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<div class="tool-wrap">
+
+  <a href="tools.html" class="tool-back">← Tools</a>
+
+  <p class="tool-label">// Producer Tool</p>
+  <h1>Streaming <span>Revenue</span><br>Calculator</h1>
+  <p class="tool-sub">Enter your stream counts per platform and instantly see your estimated earnings — plus how many streams you need to break even on a beat purchase.</p>
+
+  <!-- PLATFORM INPUTS -->
+  <div class="platforms-grid" id="platforms-grid"></div>
+
+  <button class="calc-btn" id="calc-btn">Calculate Earnings →</button>
+
+  <!-- RESULTS -->
+  <div class="results" id="results">
+    <div class="results-divider"></div>
+
+    <div class="total-card">
+      <p class="total-label">// Estimated total earnings</p>
+      <div class="total-amount" id="total-amount">$0.00</div>
+      <p class="total-streams" id="total-streams-label"></p>
+    </div>
+
+    <p class="breakdown-title">// By platform</p>
+    <div class="breakdown-list" id="breakdown-list"></div>
+
+    <div class="breakeven-section">
+      <p class="breakeven-title">// Beat purchase breakeven</p>
+      <div class="breakeven-tiers" id="breakeven-tiers"></div>
+    </div>
+
+    <p class="results-note">
+      Rates are approximate industry averages (2024–2025) and vary based on listener country, subscription tier, label agreements and other factors. Use as an estimate only.
+    </p>
+  </div>
+
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var PLATFORMS = [
+    { id: 'spotify',      name: 'Spotify',       icon: '🎧', rate: 0.004  },
+    { id: 'apple',        name: 'Apple Music',    icon: '🍎', rate: 0.008  },
+    { id: 'tidal',        name: 'TIDAL',          icon: '🌊', rate: 0.010  },
+    { id: 'amazon',       name: 'Amazon Music',   icon: '📦', rate: 0.004  },
+    { id: 'youtube',      name: 'YouTube Music',  icon: '▶️',  rate: 0.002  },
+    { id: 'deezer',       name: 'Deezer',         icon: '🎵', rate: 0.0035 },
+    { id: 'soundcloud',   name: 'SoundCloud',     icon: '☁️',  rate: 0.003  },
+    { id: 'pandora',      name: 'Pandora',        icon: '📻', rate: 0.0013 },
+  ];
+
+  var TIERS = [
+    { name: 'Basic',        price: 29.99 },
+    { name: 'Professional', price: 59.99 },
+    { name: 'Unlimited',    price: 99.99 },
+  ];
+
+  // Build platform inputs
+  var grid = document.getElementById('platforms-grid');
+  PLATFORMS.forEach(function (p) {
+    var row = document.createElement('div');
+    row.className = 'platform-row';
+    row.innerHTML =
+      '<span class="platform-icon">' + p.icon + '</span>' +
+      '<div class="platform-info">' +
+        '<span class="platform-name">' + p.name + '</span>' +
+        '<span class="platform-rate">~$' + p.rate.toFixed(4) + '/stream</span>' +
+      '</div>' +
+      '<input class="platform-input" type="number" min="0" step="1" placeholder="0" id="input-' + p.id + '" aria-label="' + p.name + ' streams">';
+    grid.appendChild(row);
+  });
+
+  function formatUSD(n) {
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function formatNum(n) {
+    return n.toLocaleString('en-US');
+  }
+
+  document.getElementById('calc-btn').addEventListener('click', function () {
+    var totalEarnings = 0;
+    var totalStreams  = 0;
+    var rows = [];
+
+    PLATFORMS.forEach(function (p) {
+      var val = parseInt(document.getElementById('input-' + p.id).value, 10) || 0;
+      var earn = val * p.rate;
+      totalStreams  += val;
+      totalEarnings += earn;
+      if (val > 0) rows.push({ p: p, streams: val, earn: earn });
+    });
+
+    // Total
+    document.getElementById('total-amount').textContent = formatUSD(totalEarnings);
+    document.getElementById('total-streams-label').textContent =
+      formatNum(totalStreams) + ' total streams across ' + rows.length + ' platform' + (rows.length !== 1 ? 's' : '');
+
+    // Breakdown
+    var list = document.getElementById('breakdown-list');
+    list.innerHTML = '';
+    if (rows.length === 0) {
+      list.innerHTML = '<p style="font-size:0.8rem;color:var(--muted);text-align:center;padding:16px 0">No streams entered.</p>';
+    } else {
+      rows.sort(function (a, b) { return b.earn - a.earn; });
+      rows.forEach(function (r, i) {
+        var row = document.createElement('div');
+        row.className = 'breakdown-row';
+        row.style.animationDelay = (i * 0.04) + 's';
+        row.innerHTML =
+          '<span class="breakdown-icon">' + r.p.icon + '</span>' +
+          '<span class="breakdown-name">'  + r.p.name + '</span>' +
+          '<span class="breakdown-streams">' + formatNum(r.streams) + ' str.</span>' +
+          '<span class="breakdown-earn">'  + formatUSD(r.earn) + '</span>';
+        list.appendChild(row);
+      });
+    }
+
+    // Breakeven
+    var beContainer = document.getElementById('breakeven-tiers');
+    beContainer.innerHTML = '';
+    TIERS.forEach(function (tier) {
+      var reached   = totalEarnings >= tier.price;
+      var pct       = Math.min(100, totalEarnings / tier.price * 100);
+      var needed    = Math.max(0, tier.price - totalEarnings);
+      var statusTxt = reached ? '✓ Reached' : formatUSD(needed) + ' to go';
+
+      var tierEl = document.createElement('div');
+      tierEl.className = 'breakeven-tier';
+      tierEl.innerHTML =
+        '<span class="tier-label">' + tier.name + '<br><span style="font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;color:var(--muted)">$' + tier.price.toFixed(2) + '</span></span>' +
+        '<div class="tier-bar-wrap"><div class="tier-bar' + (reached ? ' reached' : '') + '" style="width:' + pct + '%"></div></div>' +
+        '<span class="tier-status' + (reached ? ' reached' : '') + '">' + statusTxt + '</span>';
+      beContainer.appendChild(tierEl);
+    });
+
+    // Animate bars after render
+    setTimeout(function () {
+      var bars = beContainer.querySelectorAll('.tier-bar');
+      bars.forEach(function (b) { b.style.width = b.style.width; }); // no-op, already set inline
+    }, 20);
+
+    var results = document.getElementById('results');
+    results.classList.add('visible');
+    results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+
+  // Allow Enter key to trigger calc
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') document.getElementById('calc-btn').click();
+  });
+})();
+</script>
+</body>
+</html>

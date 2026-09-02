@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chord Progression Generator — DC Beats</title>
+<meta name="description" content="Free chord progression generator for producers and artists. Pick a key, scale and genre to get harmonic progressions — play back in browser and export as MIDI." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://dcbeats.net/pages/chord-progression.html" />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="https://dcbeats.net/pages/chord-progression.html" />
+<meta property="og:title"       content="Chord Progression Generator — DC Beats" />
+<meta property="og:description" content="Free chord progression generator. Pick key, scale and genre — play chords in browser or export as MIDI." />
+<meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+<meta name="twitter:card"       content="summary_large_image" />
+<meta name="twitter:title"      content="Chord Progression Generator — DC Beats" />
+<meta name="twitter:description" content="Free browser-based chord progression generator with MIDI export." />
+<meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+<meta name="theme-color" content="#0a0a0b" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/cookies.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  #nav {
+    background: rgba(10,10,10,0.96) !important;
+    border-bottom-color: rgba(255,255,255,0.06) !important;
+  }
+  #nav::before {
+    content: ''; position: absolute; inset: 0;
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: -1;
+  }
+
+  :root {
+    --gold: #c8a96e; --gold-bright: #e0c07a;
+    --bg: #0a0a0b; --surface: #111113; --surface2: #1a1a1e;
+    --border: rgba(200,169,110,0.15); --text: #e8e4da; --muted: #6b6560;
+  }
+
+  body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .tool-wrap { width: 100%; max-width: 1100px; margin: 0 auto; padding: 96px 2rem 5rem; }
+  .tool-wrap header { text-align: center; margin-bottom: 3rem; }
+  .tool-ui-inner { max-width: 700px; margin: 0 auto; }
+
+  .breadcrumb { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.75rem; }
+  .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb .sep { margin: 0 0.5em; opacity: 0.35; }
+  .brand { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.75rem; opacity: 0.8; }
+  .tool-wrap h1 { font-size: clamp(2rem,5vw,3rem); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .tool-wrap h1 span { color: var(--gold); }
+  .subtitle { margin-top: 0.75rem; font-size: 0.85rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+
+  /* ── Section label ── */
+  .ctrl-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.6rem; }
+  .ctrl-row { margin-bottom: 1.25rem; }
+
+  /* ── Pill button group ── */
+  .pill-group { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .pill-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em;
+    padding: 0.38rem 0.75rem; border: 1px solid var(--border); border-radius: 1px;
+    background: var(--surface); color: var(--muted); cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .pill-btn:hover { border-color: rgba(200,169,110,0.4); color: var(--gold); }
+  .pill-btn.sel { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.07); }
+
+  /* ── Pattern buttons ── */
+  #patternWrap { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .pat-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em;
+    padding: 0.38rem 0.9rem; border: 1px solid var(--border); border-radius: 1px;
+    background: var(--surface); color: var(--muted); cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pat-btn:hover { border-color: rgba(200,169,110,0.4); color: var(--text); }
+  .pat-btn.sel { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.07); }
+
+  /* ── Custom degree selectors ── */
+  #customWrap { display: none; gap: 0.5rem; flex-wrap: wrap; }
+  .deg-select {
+    flex: 1; min-width: 120px;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.04em;
+    padding: 0.45rem 0.7rem; border: 1px solid var(--border); border-radius: 1px;
+    background: var(--surface); color: var(--text); cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+  }
+  .deg-select:focus { outline: none; border-color: var(--gold); }
+
+  /* ── Chord blocks ── */
+  .chord-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+    margin: 2rem 0;
+  }
+  @media (max-width: 480px) { .chord-row { grid-template-columns: repeat(2,1fr); } }
+  .chord-block {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 2px;
+    padding: 1.25rem 0.75rem 1rem; text-align: center;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .chord-block::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .chord-block.playing { border-color: rgba(200,169,110,0.5); background: rgba(200,169,110,0.04); }
+  .chord-block.playing::before { opacity: 0.6; }
+  .cb-roman { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+  .cb-name { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gold-bright); line-height: 1; letter-spacing: -0.02em; }
+  .cb-notes { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--muted); margin-top: 0.5rem; letter-spacing: 0.05em; }
+
+  /* ── BPM & bars ── */
+  .bpm-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .bpm-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none; flex: 1; min-width: 100px;
+    height: 2px; background: var(--surface2); border-radius: 1px; outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--gold); cursor: pointer;
+  }
+  .bpm-val { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--gold); min-width: 2.5rem; text-align: right; }
+
+  /* ── Action buttons ── */
+  .action-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+  .action-btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 0.65rem 1.25rem;
+    border: 1px solid var(--border); border-radius: 1px;
+    background: transparent; color: var(--muted); cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .action-btn:hover { border-color: rgba(200,169,110,0.4); color: var(--gold); }
+  .action-btn.primary { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.06); }
+  .action-btn.primary:hover { background: rgba(200,169,110,0.12); }
+  .action-btn.playing { border-color: rgba(200,169,110,0.5); color: var(--gold); background: rgba(200,169,110,0.1); }
+  .action-btn.copied { border-color: rgba(100,200,100,0.5); color: #6dc87a; }
+
+  /* ── Copy preview ── */
+  .copy-preview {
+    margin-top: 0.6rem;
+    font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 1px;
+    padding: 0.55rem 0.8rem; letter-spacing: 0.03em;
+  }
+
+  /* ── Info section ── */
+  .tool-info { margin-top: 4rem; }
+  .tool-info-divider { height: 1px; background: linear-gradient(90deg,transparent,var(--border),transparent); margin-bottom: 3rem; }
+  .tool-info-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+  .info-cards { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-bottom: 2rem; }
+  @media (max-width: 600px) { .info-cards { grid-template-columns: 1fr; } }
+  .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 1.25rem 1.5rem; }
+  .info-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; margin-top: 0.75rem; }
+  .info-card strong { color: var(--text); }
+  .info-cta-box { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .info-cta-box p { font-size: 0.83rem; color: var(--muted); margin: 0; line-height: 1.6; }
+  .info-cta-box a.inline { color: var(--gold); text-decoration: none; }
+  .info-cta-box a.inline:hover { text-decoration: underline; }
+  .info-cta-btn { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.1rem; border: 1px solid rgba(122,100,64,0.6); color: var(--gold); text-decoration: none; border-radius: 2px; transition: all 0.2s; white-space: nowrap; }
+  .info-cta-btn:hover { border-color: var(--gold); background: rgba(200,169,110,0.07); }
+
+  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+</style>
+</head>
+<body>
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<div class="tool-wrap">
+  <header>
+    <p class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><a href="tools.html">Tools</a><span class="sep">/</span>Chord Progression Generator</p>
+    <p class="brand">DC Beats · Tools</p>
+    <h1>Chord <span>Progression</span> Generator</h1>
+    <p class="subtitle">// pick a key, scale and genre. play back or export as midi.</p>
+  </header>
+
+  <div class="tool-ui-inner">
+
+    <!-- KEY -->
+    <div class="ctrl-row">
+      <p class="ctrl-label">// root key</p>
+      <div class="pill-group" id="keyGroup"></div>
+    </div>
+
+    <!-- SCALE -->
+    <div class="ctrl-row">
+      <p class="ctrl-label">// scale</p>
+      <div class="pill-group" id="scaleGroup"></div>
+    </div>
+
+    <!-- GENRE -->
+    <div class="ctrl-row">
+      <p class="ctrl-label">// genre preset</p>
+      <div class="pill-group" id="genreGroup"></div>
+    </div>
+
+    <!-- PATTERN / CUSTOM -->
+    <div class="ctrl-row">
+      <p class="ctrl-label" id="patternLabel">// pattern</p>
+      <div id="patternWrap"></div>
+      <div id="customWrap"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- CHORD BLOCKS -->
+    <div class="chord-row" id="chordRow">
+      <div class="chord-block"><p class="cb-roman">—</p><p class="cb-name">—</p><p class="cb-notes">—</p></div>
+      <div class="chord-block"><p class="cb-roman">—</p><p class="cb-name">—</p><p class="cb-notes">—</p></div>
+      <div class="chord-block"><p class="cb-roman">—</p><p class="cb-name">—</p><p class="cb-notes">—</p></div>
+      <div class="chord-block"><p class="cb-roman">—</p><p class="cb-name">—</p><p class="cb-notes">—</p></div>
+    </div>
+
+    <!-- BPM -->
+    <div class="ctrl-row">
+      <p class="ctrl-label">// tempo</p>
+      <div class="bpm-row">
+        <span class="bpm-label">BPM</span>
+        <input type="range" id="bpmSlider" min="50" max="180" value="85" step="1">
+        <span class="bpm-val" id="bpmVal">85</span>
+      </div>
+    </div>
+
+    <!-- BARS PER CHORD -->
+    <div class="ctrl-row">
+      <p class="ctrl-label">// bars per chord</p>
+      <div class="pill-group" id="barsGroup">
+        <button class="pill-btn" data-bars="1">1 bar</button>
+        <button class="pill-btn sel" data-bars="2">2 bars</button>
+        <button class="pill-btn" data-bars="4">4 bars</button>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="action-row">
+      <button class="action-btn primary" id="playBtn">▶ Play</button>
+      <button class="action-btn" id="shuffleBtn">⟳ Shuffle</button>
+      <button class="action-btn" id="midiBtn">↓ Export MIDI</button>
+      <button class="action-btn" id="copyBtn">⎘ Copy text</button>
+    </div>
+    <div class="copy-preview" id="copyPreview">—</div>
+
+  </div><!-- /.tool-ui-inner -->
+
+  <div class="tool-info">
+    <div class="tool-info-divider"></div>
+    <p class="tool-info-label">// about this tool</p>
+    <div class="info-cards">
+      <div class="info-card">
+        <p class="tool-info-label">// how it works</p>
+        <p>Select a root key, scale and genre preset to load common progressions for that style. Switch to <strong>Custom</strong> to build your own by choosing individual scale degrees. Hit Play to hear the progression loop at your chosen BPM, or export a <strong>MIDI file</strong> and drop it straight into your DAW.</p>
+      </div>
+      <div class="info-card">
+        <p class="tool-info-label">// scale degrees</p>
+        <p>Each chord is shown with its <strong>Roman numeral</strong> (I, ii, III…). Uppercase = major, lowercase = minor, ° = diminished. The same progression in a different key keeps the same emotional character — just move the root note.</p>
+        <p>The MIDI export places chords in the 4th octave (C4 = middle C) with voicings as root, third, fifth.</p>
+      </div>
+    </div>
+    <div class="info-cta-box">
+      <p>Found a key and progression you like? Check the <a href="bpm-key-finder.html" class="inline">BPM &amp; Key Finder</a> to match your beat to the same key before recording.</p>
+      <a href="bpm-key-finder.html" class="info-cta-btn">Key Finder →</a>
+    </div>
+  </div>
+</div>
+
+<footer id="footer"></footer>
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+// ─── Data ─────────────────────────────────────────────────────────
+const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+const SCALES = {
+  major:      { label:'Major',      intervals:[0,2,4,5,7,9,11], qualities:['M','m','m','M','M','m','d'] },
+  minor:      { label:'Minor',      intervals:[0,2,3,5,7,8,10], qualities:['m','d','M','m','m','M','M'] },
+  dorian:     { label:'Dorian',     intervals:[0,2,3,5,7,9,10], qualities:['m','m','M','M','m','d','M'] },
+  mixolydian: { label:'Mixolydian', intervals:[0,2,4,5,7,9,10], qualities:['M','m','d','M','m','m','M'] },
+};
+
+const ROMAN = ['I','II','III','IV','V','VI','VII'];
+
+const GENRES = {
+  pop:        { label:'Pop',     scale:'major', patterns:[
+    {name:'I – V – vi – IV',    degrees:[1,5,6,4]},
+    {name:'I – IV – V – I',     degrees:[1,4,5,1]},
+    {name:'vi – IV – I – V',    degrees:[6,4,1,5]},
+  ]},
+  hiphop:     { label:'Hip-Hop', scale:'minor', patterns:[
+    {name:'i – VII – VI – VII', degrees:[1,7,6,7]},
+    {name:'i – VI – III – VII', degrees:[1,6,3,7]},
+    {name:'i – iv – VII – III', degrees:[1,4,7,3]},
+  ]},
+  rnb:        { label:'R&B',     scale:'minor', patterns:[
+    {name:'i – VI – III – VII', degrees:[1,6,3,7]},
+    {name:'i – iv – i – V',     degrees:[1,4,1,5]},
+    {name:'i – III – VII – VI', degrees:[1,3,7,6]},
+  ]},
+  jazz:       { label:'Jazz',    scale:'major', patterns:[
+    {name:'ii – V – I – I',     degrees:[2,5,1,1]},
+    {name:'I – vi – ii – V',    degrees:[1,6,2,5]},
+    {name:'iii – VI – ii – V',  degrees:[3,6,2,5]},
+  ]},
+  latin:      { label:'Latin',   scale:'minor', patterns:[
+    {name:'i – VII – VI – V',   degrees:[1,7,6,5]},
+    {name:'i – iv – V – i',     degrees:[1,4,5,1]},
+    {name:'i – III – VII – i',  degrees:[1,3,7,1]},
+  ]},
+  rock:       { label:'Rock',    scale:'major', patterns:[
+    {name:'I – IV – V – I',     degrees:[1,4,5,1]},
+    {name:'I – V – IV – I',     degrees:[1,5,4,1]},
+    {name:'I – V – vi – IV',    degrees:[1,5,6,4]},
+  ]},
+  custom:     { label:'Custom',  scale:'minor', patterns:[] },
+};
+
+// ─── State ────────────────────────────────────────────────────────
+const S = {
+  root: 0, scaleKey: 'minor', genre: 'hiphop', patternIdx: 0,
+  degrees: [1,7,6,7], bpm: 85, barsPerChord: 2,
+  isPlaying: false, audioCtx: null, scheduledNodes: [], loopTimer: null,
+};
+
+// ─── Music helpers ────────────────────────────────────────────────
+function getRoman(degree, quality) {
+  const r = ROMAN[(degree-1)%7];
+  return quality === 'M' ? r : quality === 'm' ? r.toLowerCase() : r.toLowerCase()+'°';
+}
+
+function getChord(root, scaleKey, degree) {
+  const sc = SCALES[scaleKey];
+  const idx = (degree-1)%7;
+  const q   = sc.qualities[idx];
+  const cr  = (root + sc.intervals[idx]) % 12;
+  const t = q==='M' ? 4 : 3;
+  const f = q==='d' ? 6 : 7;
+  const base = 60 + cr; // MIDI C4=60
+  return {
+    quality: q, root: cr, roman: getRoman(degree, q),
+    name: NOTES[cr] + (q==='M'?'': q==='m'?'m':'dim'),
+    noteNames: [NOTES[cr], NOTES[(cr+t)%12], NOTES[(cr+f)%12]],
+    midi: [base, base+t, base+f],
+  };
+}
+
+function getChords() { return S.degrees.map(d => getChord(S.root, S.scaleKey, d)); }
+
+// ─── Render ───────────────────────────────────────────────────────
+function render() {
+  const chords = getChords();
+
+  // Key buttons
+  document.querySelectorAll('[data-key]').forEach(b =>
+    b.classList.toggle('sel', +b.dataset.key === S.root));
+  // Scale buttons
+  document.querySelectorAll('[data-scale]').forEach(b =>
+    b.classList.toggle('sel', b.dataset.scale === S.scaleKey));
+  // Genre buttons
+  document.querySelectorAll('[data-genre]').forEach(b =>
+    b.classList.toggle('sel', b.dataset.genre === S.genre));
+
+  // Patterns or custom
+  const patWrap = document.getElementById('patternWrap');
+  const cusWrap = document.getElementById('customWrap');
+  const patLabel = document.getElementById('patternLabel');
+  if (S.genre === 'custom') {
+    patWrap.style.display = 'none';
+    cusWrap.style.display = 'flex';
+    patLabel.textContent = '// chord degrees';
+    renderCustom();
+  } else {
+    patWrap.style.display = 'flex';
+    cusWrap.style.display = 'none';
+    patLabel.textContent = '// pattern';
+    renderPatterns();
+  }
+
+  // Chord blocks
+  document.querySelectorAll('.chord-block').forEach((el, i) => {
+    const c = chords[i];
+    el.querySelector('.cb-roman').textContent = c.roman;
+    el.querySelector('.cb-name').textContent  = c.name;
+    el.querySelector('.cb-notes').textContent = c.noteNames.join(' · ');
+  });
+
+  // Copy preview
+  const kn = NOTES[S.root];
+  document.getElementById('copyPreview').textContent =
+    `Key: ${kn} ${SCALES[S.scaleKey].label}  ·  ${chords.map(c=>c.name).join(' – ')}`;
+}
+
+function renderPatterns() {
+  const wrap = document.getElementById('patternWrap');
+  const g = GENRES[S.genre];
+  wrap.innerHTML = '';
+  g.patterns.forEach((p, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'pat-btn' + (i===S.patternIdx ? ' sel' : '');
+    btn.textContent = p.name;
+    btn.addEventListener('click', () => {
+      S.patternIdx = i;
+      S.degrees = [...p.degrees];
+      render();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+function renderCustom() {
+  const wrap = document.getElementById('customWrap');
+  if (wrap.children.length === 4) {
+    // Already rendered — just sync values
+    Array.from(wrap.children).forEach((sel, pos) => { sel.value = S.degrees[pos]; });
+    return;
+  }
+  wrap.innerHTML = '';
+  for (let pos = 0; pos < 4; pos++) {
+    const sel = document.createElement('select');
+    sel.className = 'deg-select';
+    for (let d = 1; d <= 7; d++) {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = `Degree ${d}`;
+      sel.appendChild(opt);
+    }
+    sel.value = S.degrees[pos];
+    sel.addEventListener('change', () => {
+      S.degrees[pos] = +sel.value;
+      render();
+    });
+    wrap.appendChild(sel);
+  }
+}
+
+// ─── Playback ─────────────────────────────────────────────────────
+function scheduleChord(ctx, chord, t, dur) {
+  chord.midi.forEach(midi => {
+    const freq = 440 * Math.pow(2, (midi - 69) / 12);
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.22, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.1, t + Math.min(0.5, dur*0.3));
+    gain.gain.setValueAtTime(0.1, t + dur - 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.start(t); osc.stop(t + dur + 0.05);
+    S.scheduledNodes.push(osc);
+  });
+}
+
+function scheduleLoop() {
+  if (!S.isPlaying) return;
+  const ctx    = S.audioCtx;
+  const chords = getChords();
+  const chordDur = (60 / S.bpm) * 4 * S.barsPerChord;
+  const totalDur = chordDur * chords.length;
+  const start    = ctx.currentTime + 0.05;
+
+  chords.forEach((chord, i) => {
+    scheduleChord(ctx, chord, start + i * chordDur, chordDur);
+    const delay = (start + i * chordDur - ctx.currentTime) * 1000;
+    setTimeout(() => {
+      if (!S.isPlaying) return;
+      document.querySelectorAll('.chord-block').forEach((b, j) =>
+        b.classList.toggle('playing', j === i));
+    }, delay);
+  });
+
+  S.loopTimer = setTimeout(scheduleLoop, (start - ctx.currentTime + totalDur - 0.08) * 1000);
+}
+
+function startPlay() {
+  if (S.isPlaying) { stopPlay(); return; }
+  if (!S.audioCtx) S.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (S.audioCtx.state === 'suspended') S.audioCtx.resume();
+  S.isPlaying = true;
+  const btn = document.getElementById('playBtn');
+  btn.textContent = '■ Stop'; btn.classList.add('playing');
+  scheduleLoop();
+}
+
+function stopPlay() {
+  S.isPlaying = false;
+  clearTimeout(S.loopTimer);
+  S.scheduledNodes.forEach(n => { try { n.stop(); } catch(e){} });
+  S.scheduledNodes = [];
+  document.querySelectorAll('.chord-block').forEach(b => b.classList.remove('playing'));
+  const btn = document.getElementById('playBtn');
+  btn.textContent = '▶ Play'; btn.classList.remove('playing');
+}
+
+// ─── MIDI Export ──────────────────────────────────────────────────
+function exportMidi() {
+  const chords = getChords();
+  const TPB    = 480;
+  const tempo  = Math.round(60000000 / S.bpm);
+  const cTicks = TPB * 4 * S.barsPerChord;
+
+  function vlq(n) {
+    if (n < 128) return [n];
+    const b = [n & 0x7F]; n >>= 7;
+    while (n > 0) { b.unshift((n & 0x7F) | 0x80); n >>= 7; }
+    return b;
+  }
+
+  const trk = [];
+  trk.push(0, 0xFF, 0x51, 0x03, (tempo>>16)&0xFF, (tempo>>8)&0xFF, tempo&0xFF);
+  chords.forEach(c => {
+    c.midi.forEach(n => trk.push(...vlq(0), 0x90, n, 80));
+    c.midi.forEach((n, i) => trk.push(...vlq(i===0 ? cTicks : 0), 0x80, n, 0));
+  });
+  trk.push(0, 0xFF, 0x2F, 0x00);
+
+  const TL = trk.length;
+  const bytes = new Uint8Array([
+    0x4D,0x54,0x68,0x64, 0,0,0,6, 0,0, 0,1, (TPB>>8)&0xFF, TPB&0xFF,
+    0x4D,0x54,0x72,0x6B, (TL>>24)&0xFF,(TL>>16)&0xFF,(TL>>8)&0xFF,TL&0xFF,
+    ...trk
+  ]);
+  const url = URL.createObjectURL(new Blob([bytes], {type:'audio/midi'}));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${NOTES[S.root]}-${S.scaleKey}.mid`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+// ─── Copy text ────────────────────────────────────────────────────
+function copyText() {
+  const preview = document.getElementById('copyPreview').textContent;
+  navigator.clipboard.writeText(preview).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ─── Shuffle ──────────────────────────────────────────────────────
+function shuffle() {
+  S.degrees = [1,2,3,4,5,6,7].sort(()=>Math.random()-0.5).slice(0,4);
+  S.genre = 'custom'; S.patternIdx = 0;
+  document.querySelectorAll('[data-genre]').forEach(b =>
+    b.classList.toggle('sel', b.dataset.genre === 'custom'));
+  render();
+}
+
+// ─── Build static UI ──────────────────────────────────────────────
+(function buildUI() {
+  // Key buttons
+  const kg = document.getElementById('keyGroup');
+  NOTES.forEach((n, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'pill-btn'; btn.dataset.key = i; btn.textContent = n;
+    btn.addEventListener('click', () => { S.root = i; render(); });
+    kg.appendChild(btn);
+  });
+
+  // Scale buttons
+  const sg = document.getElementById('scaleGroup');
+  Object.entries(SCALES).forEach(([key, sc]) => {
+    const btn = document.createElement('button');
+    btn.className = 'pill-btn'; btn.dataset.scale = key; btn.textContent = sc.label;
+    btn.addEventListener('click', () => { S.scaleKey = key; render(); });
+    sg.appendChild(btn);
+  });
+
+  // Genre buttons
+  const gg = document.getElementById('genreGroup');
+  Object.entries(GENRES).forEach(([key, g]) => {
+    const btn = document.createElement('button');
+    btn.className = 'pill-btn'; btn.dataset.genre = key; btn.textContent = g.label;
+    btn.addEventListener('click', () => {
+      S.genre = key; S.patternIdx = 0;
+      if (key !== 'custom' && GENRES[key].scale) S.scaleKey = GENRES[key].scale;
+      if (key !== 'custom') S.degrees = [...GENRES[key].patterns[0].degrees];
+      render();
+    });
+    gg.appendChild(btn);
+  });
+
+  // BPM slider
+  const slider = document.getElementById('bpmSlider');
+  slider.addEventListener('input', () => {
+    S.bpm = +slider.value;
+    document.getElementById('bpmVal').textContent = S.bpm;
+  });
+
+  // Bars buttons
+  document.querySelectorAll('[data-bars]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.barsPerChord = +btn.dataset.bars;
+      document.querySelectorAll('[data-bars]').forEach(b =>
+        b.classList.toggle('sel', b.dataset.bars === btn.dataset.bars));
+    });
+  });
+
+  // Action buttons
+  document.getElementById('playBtn').addEventListener('click', startPlay);
+  document.getElementById('shuffleBtn').addEventListener('click', shuffle);
+  document.getElementById('midiBtn').addEventListener('click', exportMidi);
+  document.getElementById('copyBtn').addEventListener('click', copyText);
+
+  render();
+})();
+</script>
+</body>
+</html>

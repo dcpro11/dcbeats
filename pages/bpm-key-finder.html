@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPM & Key Finder — DC Beats</title>
+<meta name="description" content="Free BPM and musical key detection tool. Drop any audio file — tempo and key analysis runs entirely in your browser, nothing is uploaded." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://dcbeats.net/pages/bpm-key-finder.html" />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="https://dcbeats.net/pages/bpm-key-finder.html" />
+<meta property="og:title"       content="BPM & Key Finder — DC Beats" />
+<meta property="og:description" content="Free BPM and key detection tool for producers and artists. Audio analysis runs locally — nothing uploaded." />
+<meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+<meta name="twitter:card"       content="summary_large_image" />
+<meta name="twitter:title"      content="BPM & Key Finder — DC Beats" />
+<meta name="twitter:description" content="Free browser-based BPM and musical key detection tool." />
+<meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+<meta name="theme-color" content="#0a0a0b" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/cookies.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Force nav visible — no hero on this page, so don't wait for scroll */
+  #nav {
+    background: rgba(10, 10, 10, 0.96) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  }
+  #nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: -1;
+  }
+
+  :root {
+    --gold: #c8a96e;
+    --gold-bright: #e0c07a;
+    --bg: #0a0a0b;
+    --surface: #111113;
+    --surface2: #1a1a1e;
+    --border: rgba(200,169,110,0.15);
+    --text: #e8e4da;
+    --muted: #6b6560;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .tool-wrap {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 96px 2rem 5rem;
+  }
+
+  .tool-wrap header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .tool-ui-inner {
+    max-width: 660px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+  }
+  .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb .sep { margin: 0 0.5em; opacity: 0.35; }
+
+  .tool-info { margin-top: 4rem; }
+  .tool-info-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin-bottom: 3.5rem; }
+  .tool-info-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+  .info-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+  @media (max-width: 640px) { .info-steps { grid-template-columns: 1fr; } }
+  .info-step { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .info-step-num { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--gold); opacity: 0.55; min-width: 2rem; padding-top: 3px; }
+  .info-step strong { font-size: 0.88rem; color: var(--text); display: block; margin-bottom: 0.3rem; }
+  .info-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; margin: 0; }
+  .info-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+  @media (max-width: 640px) { .info-cards { grid-template-columns: 1fr; } }
+  .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 1.25rem 1.5rem; }
+  .info-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; margin-top: 0.75rem; }
+  .info-card p + p { margin-top: 0.5rem; }
+  .info-card strong { color: var(--text); }
+  .info-cta-box { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .info-cta-box p { font-size: 0.83rem; color: var(--muted); margin: 0; line-height: 1.6; }
+  .info-cta-box a.inline { color: var(--gold); text-decoration: none; }
+  .info-cta-box a.inline:hover { text-decoration: underline; }
+  .info-cta-btn { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.1rem; border: 1px solid var(--gold-dim, #7a6440); color: var(--gold); text-decoration: none; border-radius: 2px; transition: border-color 0.2s, background 0.2s; white-space: nowrap; }
+  .info-cta-btn:hover { border-color: var(--gold); background: rgba(200,169,110,0.07); }
+
+  .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    opacity: 0.8;
+  }
+
+  .tool-wrap h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .tool-wrap h1 span {
+    color: var(--gold);
+  }
+
+  .subtitle {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* Drop Zone */
+  .drop-zone {
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 3.5rem 2rem;
+    text-align: center;
+    background: var(--surface);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .drop-zone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,169,110,0.03) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .drop-zone.drag-over {
+    border-color: var(--gold);
+    background: rgba(200,169,110,0.05);
+  }
+
+  .drop-zone.processing {
+    border-color: rgba(200,169,110,0.4);
+    cursor: default;
+  }
+
+  .drop-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .drop-zone.drag-over .drop-icon {
+    border-color: var(--gold);
+    transform: scale(1.05);
+  }
+
+  .drop-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .drop-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .drop-hint {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .drop-hint span {
+    color: var(--gold);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgba(200,169,110,0.3);
+  }
+
+  #fileInput { display: none; }
+
+  /* Progress */
+  .progress-wrap {
+    display: none;
+    margin-top: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .progress-wrap.visible { display: flex; }
+
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 1px;
+  }
+
+  /* Results */
+  .results {
+    display: none;
+    margin-top: 1.5rem;
+    gap: 1rem;
+    flex-direction: column;
+  }
+
+  .results.visible { display: flex; }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .result-card:nth-child(2) { animation-delay: 0.1s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.3;
+  }
+
+  .result-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .result-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--gold-bright);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .result-unit {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 0.2rem;
+  }
+
+  .result-sub {
+    margin-top: 0.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  /* Confidence bar */
+  .confidence-wrap {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .confidence-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .confidence-bar {
+    flex: 1;
+    height: 2px;
+    background: var(--surface2);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+    border-radius: 1px;
+    transition: width 0.6s ease 0.3s;
+  }
+
+  /* File info */
+  .file-info {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: fadeUp 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  .file-info-icon {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .file-info-icon svg {
+    width: 12px;
+    height: 12px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .file-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-size {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Key candidates */
+  .key-candidates {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.25rem 1.5rem;
+    animation: fadeUp 0.4s ease 0.2s forwards;
+    opacity: 0;
+  }
+
+  .key-candidates-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .key-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .key-pill {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 1px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .key-pill.primary {
+    border-color: rgba(200,169,110,0.5);
+    color: var(--gold);
+    background: rgba(200,169,110,0.05);
+  }
+
+  /* Waveform canvas */
+  .waveform-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1rem 1.5rem;
+    animation: fadeUp 0.4s ease 0.3s forwards;
+    opacity: 0;
+  }
+
+  .waveform-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  #waveformCanvas {
+    width: 100%;
+    height: 60px;
+    display: block;
+  }
+
+  /* Reset btn */
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: border-color 0.2s, color 0.2s;
+    display: block;
+    margin: 0 auto;
+    animation: fadeUp 0.4s ease 0.4s forwards;
+    opacity: 0;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Error */
+  .error-msg {
+    display: none;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(180, 60, 60, 0.07);
+    border: 1px solid rgba(180, 60, 60, 0.2);
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #c47;
+    margin-top: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .error-msg.visible { display: block; }
+
+</style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<div class="tool-wrap">
+  <header>
+    <p class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><a href="tools.html">Tools</a><span class="sep">/</span>BPM &amp; Key Finder</p>
+    <p class="brand">DC Beats · Tools</p>
+    <h1>BPM &amp; <span>Key</span> Finder</h1>
+    <p class="subtitle">// drop any audio file. analysis runs locally.</p>
+  </header>
+
+  <div class="tool-ui-inner">
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept="audio/*">
+    <div class="drop-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+    </div>
+    <p class="drop-title">Drop your audio file here</p>
+    <p class="drop-hint">MP3, WAV, FLAC, OGG · or <span id="browseBtn">browse files</span></p>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">
+      <span id="progressStatus">Decoding audio...</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="results" id="results">
+    <div class="file-info" id="fileInfo">
+      <div class="file-info-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <span class="file-name" id="fileName">—</span>
+      <span class="file-size" id="fileSize">—</span>
+    </div>
+
+    <div class="waveform-wrap">
+      <p class="waveform-label">// waveform</p>
+      <canvas id="waveformCanvas"></canvas>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-card">
+        <p class="result-label">// tempo</p>
+        <div class="result-value" id="bpmValue">—<span class="result-unit">BPM</span></div>
+        <p class="result-sub" id="bpmRange">—</p>
+        <div class="confidence-wrap">
+          <span class="confidence-label">conf.</span>
+          <div class="confidence-bar"><div class="confidence-fill" id="bpmConf" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="result-card">
+        <p class="result-label">// key</p>
+        <div class="result-value" id="keyValue">—</div>
+        <p class="result-sub" id="keyMode">—</p>
+        <div class="confidence-wrap">
+          <span class="confidence-label">conf.</span>
+          <div class="confidence-bar"><div class="confidence-fill" id="keyConf" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-candidates">
+      <p class="key-candidates-label">// related keys · camelot wheel</p>
+      <div class="key-list" id="keyList"></div>
+    </div>
+
+    <button class="reset-btn" id="resetBtn">↺ analyze another file</button>
+  </div>
+
+  </div><!-- /.tool-ui-inner -->
+
+  <div class="tool-info">
+    <div class="tool-info-divider"></div>
+
+    <p class="tool-info-label">// how to use</p>
+    <div class="info-steps">
+      <div class="info-step">
+        <span class="info-step-num">01</span>
+        <div>
+          <strong>Drop or select your file</strong>
+          <p>Drop any MP3, WAV, FLAC or OGG onto the zone above, or click "browse files". Analysis runs entirely in your browser — nothing is uploaded or stored.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <span class="info-step-num">02</span>
+        <div>
+          <strong>Wait a few seconds</strong>
+          <p>The tool decodes the audio, extracts onsets for BPM detection and builds a chroma vector for key analysis using Krumhansl-Schmuckler profiles. Most files complete in under 10 seconds.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <span class="info-step-num">03</span>
+        <div>
+          <strong>Read the results</strong>
+          <p>Tempo in BPM with confidence score and alternate candidates, detected key with major/minor mode, Camelot wheel position and harmonically compatible neighbouring keys.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <p class="tool-info-label">// what is BPM?</p>
+        <p>BPM (Beats Per Minute) is the tempo of a track — how many beats occur per minute. It determines energy and feel: Hip-hop sits around 85–100 BPM, Trap at 65–80 (half-time), Pop at 100–130, EDM from 120–160+.</p>
+        <p>Knowing your BPM matters for sync licensing, DJ mixing and recording in a DAW to an existing beat without drifting tempo.</p>
+      </div>
+      <div class="info-card">
+        <p class="tool-info-label">// what is musical key?</p>
+        <p>The key is the tonal centre — the root note and mode (major or minor) that everything resolves around. Major keys sound bright and uplifting; minor keys feel darker and emotional.</p>
+        <p>The <strong>Camelot Wheel</strong> maps every key by harmonic compatibility — adjacent numbers blend without clashing, making it essential for producers and DJs combining multiple tracks.</p>
+      </div>
+    </div>
+
+    <div class="info-cta-box">
+      <p>Need to check your track's loudness before distribution? Use the <a href="loudness-analyzer.html" class="inline">Loudness Analyzer</a> — measures LUFS, True Peak and compares against Spotify, YouTube and Apple Music targets.</p>
+      <a href="loudness-analyzer.html" class="info-cta-btn">Loudness Analyzer →</a>
+    </div>
+  </div>
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+// ─── Notes & Keys ────────────────────────────────────────────────
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const CAMELOT = {
+  'C major':'8B','G major':'9B','D major':'10B','A major':'11B','E major':'12B',
+  'B major':'1B','F# major':'2B','C# major':'3B','G# major':'4B','D# major':'5B',
+  'A# major':'6B','F major':'7B',
+  'A minor':'8A','E minor':'9A','B minor':'10A','F# minor':'11A','C# minor':'12A',
+  'G# minor':'1A','D# minor':'2A','A# minor':'3A','F minor':'4A','C minor':'5A',
+  'G minor':'6A','D minor':'7A'
+};
+
+const MAJOR_PROFILE = [6.35,2.23,3.48,2.33,4.38,4.09,2.52,5.19,2.39,3.66,2.29,2.88];
+const MINOR_PROFILE = [6.33,2.68,3.52,5.38,2.60,3.53,2.54,4.75,3.98,2.69,3.34,3.17];
+
+function correlate(chroma, profile) {
+  const n = 12, s1 = chroma.reduce((a,b)=>a+b,0)/n, s2 = profile.reduce((a,b)=>a+b,0)/n;
+  let num=0, d1=0, d2=0;
+  for (let i=0;i<n;i++){
+    const a=chroma[i]-s1, b=profile[i]-s2;
+    num+=a*b; d1+=a*a; d2+=b*b;
+  }
+  return num/Math.sqrt(d1*d2||1);
+}
+
+function detectKey(chroma) {
+  let best = -Infinity, bestKey = '', bestMode = '';
+  for (let i=0;i<12;i++){
+    const shifted = [...chroma.slice(i), ...chroma.slice(0,i)];
+    const majR = correlate(shifted, MAJOR_PROFILE);
+    const minR = correlate(shifted, MINOR_PROFILE);
+    if (majR > best) { best=majR; bestKey=NOTE_NAMES[i]; bestMode='major'; }
+    if (minR > best) { best=minR; bestKey=NOTE_NAMES[i]; bestMode='minor'; }
+  }
+  const confidence = Math.min(100, Math.round(((best + 1) / 2) * 100 * 1.4));
+  return { key: bestKey, mode: bestMode, confidence, full: `${bestKey} ${bestMode}` };
+}
+
+// ─── FFT (Cooley-Tukey, in-place, power-of-2) ─────────────────────
+function fft(re, im) {
+  const n = re.length;
+  for (let i = 1, j = 0; i < n; i++) {
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) {
+      let t = re[i]; re[i] = re[j]; re[j] = t;
+      t = im[i]; im[i] = im[j]; im[j] = t;
+    }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const ang = -2 * Math.PI / len;
+    const wRe = Math.cos(ang), wIm = Math.sin(ang);
+    for (let i = 0; i < n; i += len) {
+      let uRe = 1, uIm = 0;
+      const half = len >> 1;
+      for (let j = 0; j < half; j++) {
+        const k = i + j, l = k + half;
+        const vRe = re[l]*uRe - im[l]*uIm;
+        const vIm = re[l]*uIm + im[l]*uRe;
+        re[l] = re[k] - vRe; im[l] = im[k] - vIm;
+        re[k] += vRe;        im[k] += vIm;
+        const tmp = uRe*wRe - uIm*wIm;
+        uIm = uRe*wIm + uIm*wRe;
+        uRe = tmp;
+      }
+    }
+  }
+}
+
+// ─── Chroma extraction via proper FFT ────────────────────────────
+// Uses full 4096-point FFT per frame (not partial DFT) sampled every 0.5s.
+// Divides power by frequency to normalise contribution across octaves.
+function extractChroma(audioBuffer) {
+  const raw = audioBuffer.getChannelData(0);
+  const sr  = audioBuffer.sampleRate;
+  const frameSize  = 4096;
+  const hopSamples = Math.floor(sr * 0.5);
+  const chroma = new Float64Array(12).fill(0);
+
+  const hann = new Float32Array(frameSize);
+  for (let i = 0; i < frameSize; i++) hann[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / frameSize);
+
+  const re = new Float32Array(frameSize);
+  const im = new Float32Array(frameSize);
+  const freqRes = sr / frameSize;
+  const minBin = Math.max(1, Math.ceil(65.41  / freqRes)); // C2
+  const maxBin = Math.min(frameSize / 2, Math.floor(4186 / freqRes)); // C8
+  let frames = 0;
+
+  for (let start = 0; start + frameSize <= raw.length && frames < 80; start += hopSamples) {
+    for (let i = 0; i < frameSize; i++) { re[i] = raw[start + i] * hann[i]; im[i] = 0; }
+    fft(re, im);
+
+    for (let b = minBin; b <= maxBin; b++) {
+      const freq = b * freqRes;
+      const midi = Math.round(12 * Math.log2(freq / 440) + 69);
+      if (midi < 0 || midi > 127) continue;
+      const pc = ((midi % 12) + 12) % 12;
+      chroma[pc] += (re[b]*re[b] + im[b]*im[b]) / freq;
+    }
+    frames++;
+  }
+
+  const maxC = Math.max(...chroma) || 1;
+  return Array.from(chroma, v => v / maxC);
+}
+
+// ─── BPM detection — spectral flux + enhanced autocorrelation ─────
+// Spectral flux (half-wave rectified) is a robust onset function.
+// Enhanced autocorrelation sums corr[k·L]/k for k=1..4 per candidate lag L,
+// which amplifies the true fundamental period over its harmonics.
+function detectBPM(audioBuffer) {
+  const raw = audioBuffer.getChannelData(0);
+  const sr  = audioBuffer.sampleRate;
+  const frameSize = 1024;
+  const hopSize   = 512;
+
+  const hann = new Float32Array(frameSize);
+  for (let i = 0; i < frameSize; i++) hann[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / frameSize);
+
+  const re = new Float32Array(frameSize);
+  const im = new Float32Array(frameSize);
+  const prevMag = new Float32Array(frameSize / 2 + 1);
+  const flux = [];
+  const maxSamples = Math.min(raw.length, sr * 90);
+
+  for (let start = 0; start + frameSize <= maxSamples; start += hopSize) {
+    for (let i = 0; i < frameSize; i++) { re[i] = raw[start + i] * hann[i]; im[i] = 0; }
+    fft(re, im);
+
+    let f = 0;
+    for (let b = 0; b <= frameSize / 2; b++) {
+      const mag = Math.sqrt(re[b]*re[b] + im[b]*im[b]);
+      const d = mag - prevMag[b];
+      if (d > 0) f += d;
+      prevMag[b] = mag;
+    }
+    flux.push(f);
+  }
+
+  const framesPerSec = sr / hopSize;
+  const minBPM = 60, maxBPM = 200;
+  const minLag = Math.max(1, Math.round(framesPerSec * 60 / maxBPM));
+  const maxLag = Math.round(framesPerSec * 60 / minBPM);
+  const maxLagNeeded = maxLag * 4;
+  const n = flux.length;
+
+  const autocorr = new Float32Array(maxLagNeeded + 1);
+  for (let lag = minLag; lag <= maxLagNeeded && lag < n; lag++) {
+    let s = 0;
+    const cnt = n - lag;
+    for (let i = 0; i < cnt; i++) s += flux[i] * flux[i + lag];
+    autocorr[lag] = s / cnt;
+  }
+
+  let bestScore = -Infinity, bestLag = minLag;
+  for (let lag = minLag; lag <= maxLag; lag++) {
+    let score = 0, wt = 0;
+    for (let k = 1; k <= 4; k++) {
+      const l = lag * k;
+      if (l <= maxLagNeeded && l < n) { score += autocorr[l] / k; wt += 1/k; }
+    }
+    if (wt > 0) score /= wt;
+    if (score > bestScore) { bestScore = score; bestLag = lag; }
+  }
+
+  const rawBPM  = framesPerSec * 60 / bestLag;
+  const finalBPM = Math.round(rawBPM);
+
+  let maxAC = 0;
+  for (let lag = minLag; lag <= maxLag; lag++) if (autocorr[lag] > maxAC) maxAC = autocorr[lag];
+  const confidence = Math.min(95, Math.round((bestScore / (maxAC || 1)) * 70 + 20));
+
+  const candidates = [finalBPM];
+  const half = Math.round(rawBPM / 2);
+  const dbl  = Math.round(rawBPM * 2);
+  if (half >= 60 && half <= 180 && half !== finalBPM) candidates.push(half);
+  if (dbl  >= 60 && dbl  <= 180 && dbl  !== finalBPM) candidates.push(dbl);
+
+  return { bpm: finalBPM, confidence, candidates };
+}
+
+// ─── Waveform drawing ─────────────────────────────────────────────
+function drawWaveform(audioBuffer) {
+  const canvas = document.getElementById('waveformCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 60 * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const data = audioBuffer.getChannelData(0);
+  const w = canvas.offsetWidth, h = 60;
+  const step = Math.ceil(data.length / w);
+
+  const grad = ctx.createLinearGradient(0,0,w,0);
+  grad.addColorStop(0,'rgba(200,169,110,0.3)');
+  grad.addColorStop(0.5,'rgba(224,192,122,0.8)');
+  grad.addColorStop(1,'rgba(200,169,110,0.3)');
+
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+
+  for (let x=0;x<w;x++) {
+    let min=1, max=-1;
+    for (let i=0;i<step;i++) {
+      const v = data[x*step+i] || 0;
+      if (v < min) min = v;
+      if (v > max) max = v;
+    }
+    const y1 = (1 - max) / 2 * h;
+    const y2 = (1 - min) / 2 * h;
+    ctx.moveTo(x, y1);
+    ctx.lineTo(x, y2);
+  }
+  ctx.stroke();
+}
+
+// ─── Camelot related keys ─────────────────────────────────────────
+function getRelatedKeys(keyFull) {
+  const cam = CAMELOT[keyFull];
+  if (!cam) return [];
+  const num = parseInt(cam), letter = cam.slice(-1);
+  const alt = letter === 'A' ? 'B' : 'A';
+  const prev = ((num - 2 + 12) % 12) + 1;
+  const next = (num % 12) + 1;
+  const related = [
+    { label: keyFull, camelot: cam, primary: true },
+    { label: Object.keys(CAMELOT).find(k=>CAMELOT[k]===`${num}${alt}`), camelot:`${num}${alt}` },
+    { label: Object.keys(CAMELOT).find(k=>CAMELOT[k]===`${prev}${letter}`), camelot:`${prev}${letter}` },
+    { label: Object.keys(CAMELOT).find(k=>CAMELOT[k]===`${next}${letter}`), camelot:`${next}${letter}` },
+  ].filter(r=>r.label);
+  return related;
+}
+
+// ─── UI helpers ──────────────────────────────────────────────────
+function setProgress(pct, status) {
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = Math.round(pct) + '%';
+  if (status) document.getElementById('progressStatus').textContent = status;
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.classList.add('visible');
+  document.getElementById('progressWrap').classList.remove('visible');
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/(1024*1024)).toFixed(1) + ' MB';
+}
+
+// ─── Main analysis ────────────────────────────────────────────────
+async function analyzeFile(file) {
+  document.getElementById('errorMsg').classList.remove('visible');
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('progressWrap').classList.add('visible');
+  document.getElementById('dropZone').classList.add('processing');
+  setProgress(5, 'Reading file...');
+
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    setProgress(20, 'Decoding audio...');
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+    setProgress(40, 'Detecting tempo...');
+
+    await new Promise(r => setTimeout(r, 30));
+    const bpmResult = detectBPM(audioBuffer);
+    setProgress(65, 'Analyzing key...');
+
+    await new Promise(r => setTimeout(r, 30));
+    const chroma = extractChroma(audioBuffer);
+    const keyResult = detectKey(chroma);
+    setProgress(85, 'Drawing waveform...');
+
+    await new Promise(r => setTimeout(r, 20));
+    setProgress(100, 'Done!');
+    await new Promise(r => setTimeout(r, 300));
+
+    // Show results
+    document.getElementById('progressWrap').classList.remove('visible');
+    document.getElementById('results').classList.add('visible');
+
+    // File info
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = formatSize(file.size);
+
+    // Waveform
+    drawWaveform(audioBuffer);
+
+    // BPM
+    document.getElementById('bpmValue').innerHTML = `${bpmResult.bpm}<span class="result-unit">BPM</span>`;
+    const alt = bpmResult.candidates.filter(b=>b!==bpmResult.bpm).map(b=>`${b} BPM`).join(' / ');
+    document.getElementById('bpmRange').textContent = alt ? `alt: ${alt}` : `~${bpmResult.bpm} BPM detected`;
+    setTimeout(()=>{ document.getElementById('bpmConf').style.width = bpmResult.confidence + '%'; }, 100);
+
+    // Key
+    const camKey = CAMELOT[keyResult.full] || '—';
+    document.getElementById('keyValue').textContent = `${keyResult.key}`;
+    document.getElementById('keyMode').textContent = `${keyResult.mode} · camelot ${camKey}`;
+    setTimeout(()=>{ document.getElementById('keyConf').style.width = keyResult.confidence + '%'; }, 100);
+
+    // Related keys
+    const related = getRelatedKeys(keyResult.full);
+    const keyList = document.getElementById('keyList');
+    keyList.innerHTML = related.map(r=>
+      `<span class="key-pill${r.primary?' primary':''}">${r.label || '—'} <span style="opacity:0.5">${r.camelot}</span></span>`
+    ).join('');
+
+    audioCtx.close();
+  } catch(e) {
+    console.error(e);
+    showError('Could not decode audio. Try a different file (MP3, WAV, FLAC, OGG).');
+    document.getElementById('dropZone').classList.remove('processing');
+  }
+}
+
+// ─── Drag & Drop / File input ─────────────────────────────────────
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  dropZone.classList.add('drag-over');
+});
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('audio/')) analyzeFile(file);
+  else showError('Please drop a valid audio file.');
+});
+
+document.getElementById('browseBtn').addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) analyzeFile(fileInput.files[0]);
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('dropZone').classList.remove('processing');
+  fileInput.value = '';
+});
+</script>
+</body>
+</html>

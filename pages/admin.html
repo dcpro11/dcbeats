@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin — DC Beats</title>
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    /* ════════════════════════════════════════════════════════
+       Admin-only layout — scoped to this page.
+       Mirrors the site's "Dark Luxury / Gold Accents" aesthetic
+       (see css/style.css §1 for the variables reused here).
+    ════════════════════════════════════════════════════════ */
+    body {
+      padding: 0;
+      background:
+        radial-gradient(ellipse 900px 500px at 50% -10%, var(--gold-dim), transparent 60%),
+        var(--bg-primary);
+    }
+
+    /* ── Top bar ─────────────────────────────────────────────── */
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 1.4rem var(--space-md) 0.5rem;
+    }
+    .admin-topbar-brand {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    .admin-topbar-logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.02em;
+      color: var(--text-primary);
+    }
+    .admin-topbar-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-glow);
+      background: var(--gold-dim);
+      border-radius: 3px;
+      padding: 0.2rem 0.5rem;
+    }
+    .admin-topbar-link {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+      white-space: nowrap;
+    }
+    .admin-topbar-link:hover { color: var(--gold); }
+
+    .admin-wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-md) var(--space-2xl);
+    }
+    .admin-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      margin-bottom: 0.3rem;
+    }
+    .admin-sub {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      max-width: 56ch;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* ── Login gate ──────────────────────────────────────────── */
+    #admin-login {
+      max-width: 380px;
+      margin: 13vh auto 0;
+      text-align: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: var(--space-lg) var(--space-md);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    }
+    #admin-login .admin-title { font-size: 1.6rem; }
+    #admin-login-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-glow);
+      color: var(--gold);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    #admin-login input[type="password"] {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-mid);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 0.75rem 1rem;
+      margin: var(--space-sm) 0;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    #admin-login input[type="password"]:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-dim);
+    }
+    #admin-login .btn { width: 100%; justify-content: center; }
+    #admin-login-error {
+      font-size: 0.78rem;
+      color: #d97a6a;
+      min-height: 1.2em;
+      margin-top: 0.7rem;
+    }
+
+    /* ── Dashboard ───────────────────────────────────────────── */
+    #admin-dashboard { display: none; }
+    #admin-dashboard.is-visible { display: block; animation: admin-fade-in 0.4s var(--ease); }
+    @keyframes admin-fade-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .admin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: var(--space-md);
+      transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .admin-card:hover {
+      border-color: var(--border-mid);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+    }
+    .admin-card--wide { grid-column: 1 / -1; }
+
+    .admin-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      margin-bottom: 1.1rem;
+    }
+    .admin-card-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-glow);
+      color: var(--gold);
+      font-size: 1.05rem;
+    }
+    .admin-card-title {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      letter-spacing: 0.01em;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    .admin-card-desc {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin: 0.2rem 0 0;
+      line-height: 1.5;
+    }
+
+    .admin-note {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin: 0 0 0.8rem;
+      line-height: 1.5;
+    }
+    .admin-subhead {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 1.1rem 0 0.5rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--border);
+    }
+    .admin-subhead:first-of-type { border-top: none; padding-top: 0; margin-top: 0.2rem; }
+
+    .admin-field { margin-bottom: 0.85rem; }
+    .admin-field:last-child { margin-bottom: 0; }
+    .admin-field label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+    .admin-field input[type="text"],
+    .admin-field input[type="email"],
+    .admin-field input[type="number"],
+    .admin-field input[type="datetime-local"],
+    .admin-field textarea {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-mid);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      padding: 0.6rem 0.8rem;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .admin-field textarea { min-height: 64px; resize: vertical; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; }
+    .admin-field input:focus,
+    .admin-field textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px var(--gold-dim);
+    }
+    .admin-field-hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* ── Toggle switch ───────────────────────────────────────── */
+    .admin-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      cursor: pointer;
+      padding: 0.3rem 0 0.9rem;
+    }
+    .admin-toggle:last-child { padding-bottom: 0; }
+    .toggle-switch {
+      position: relative;
+      display: inline-flex;
+      flex-shrink: 0;
+      width: 42px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      margin: 0;
+      cursor: pointer;
+      z-index: 1;
+    }
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-mid);
+      border-radius: 999px;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      transition: transform var(--transition-fast), background var(--transition-fast);
+    }
+    .toggle-switch input:checked ~ .toggle-track {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+    }
+    .toggle-switch input:checked ~ .toggle-thumb {
+      transform: translateX(18px);
+      background: var(--gold);
+    }
+    .toggle-switch input:focus-visible ~ .toggle-track {
+      box-shadow: 0 0 0 3px var(--gold-dim);
+    }
+    .admin-toggle-copy strong {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .admin-toggle-copy small {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+      line-height: 1.4;
+    }
+
+    .admin-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+    .admin-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-sm);
+    }
+    @media (max-width: 600px) {
+      .admin-grid-2, .admin-grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ── Save bar ────────────────────────────────────────────── */
+    .admin-actions {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      margin-top: var(--space-md);
+      padding: 1.1rem 0 0.4rem;
+      background: linear-gradient(to top, var(--bg-primary) 55%, transparent);
+    }
+    #admin-status {
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    #admin-status.is-ok    { color: #8fd19e; }
+    #admin-status.is-error { color: #d97a6a; }
+  </style>
+</head>
+
+<body>
+
+  <header class="admin-topbar">
+    <div class="admin-topbar-brand">
+      <span class="admin-topbar-logo">DC Beats</span>
+      <span class="admin-topbar-tag">Admin</span>
+    </div>
+    <a href="../index.html" target="_blank" rel="noopener" class="admin-topbar-link">View live site ↗</a>
+  </header>
+
+  <div class="admin-wrap">
+
+    <!-- ── Login gate ───────────────────────────────────────────
+         The password is verified server-side — see attemptLogin().
+         The Apps Script is the real authority (apps-script/Code.gs
+         / handleWrite's { action: 'validate' } branch). -->
+    <div id="admin-login">
+      <span id="admin-login-icon" aria-hidden="true">✦</span>
+      <h1 class="admin-title">Admin Access</h1>
+      <p class="admin-sub" style="margin: 0 auto var(--space-sm);">Enter the admin password to manage the live site.</p>
+      <input type="password" id="admin-password-input" placeholder="Password" autocomplete="current-password" />
+      <button class="btn btn-primary" id="admin-login-btn">Continue</button>
+      <p id="admin-login-error"></p>
+    </div>
+
+    <!-- ── Dashboard ─────────────────────────────────────────── -->
+    <div id="admin-dashboard">
+      <h1 class="admin-title">Site Settings</h1>
+      <p class="admin-sub">Changes go live on the next page load — typically within a second. Visitors see a cached version instantly while the page quietly refreshes itself with your latest settings in the background.</p>
+
+      <form id="admin-form">
+        <div class="admin-grid">
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">✦</span>
+              <div>
+                <h2 class="admin-card-title">Promo Banner</h2>
+                <p class="admin-card-desc">The gold announcement bar shown just below the navigation.</p>
+              </div>
+            </div>
+            <label class="admin-toggle">
+              <span class="toggle-switch">
+                <input type="checkbox" id="promo-active" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="admin-toggle-copy"><strong>Show banner</strong><small>Visible across every page when on</small></span>
+            </label>
+            <div class="admin-field">
+              <label for="promo-text">Banner text — HTML allowed (e.g. &lt;strong&gt;)</label>
+              <textarea id="promo-text"></textarea>
+            </div>
+            <div class="admin-grid-2">
+              <div class="admin-field">
+                <label for="promo-cta-label">CTA label</label>
+                <input type="text" id="promo-cta-label" />
+              </div>
+              <div class="admin-field">
+                <label for="promo-cta-href">CTA link</label>
+                <input type="text" id="promo-cta-href" />
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">⚠</span>
+              <div>
+                <h2 class="admin-card-title">Maintenance Notice</h2>
+                <p class="admin-card-desc">A non-blocking heads-up bar — the site stays fully usable while it's shown.</p>
+              </div>
+            </div>
+            <label class="admin-toggle">
+              <span class="toggle-switch">
+                <input type="checkbox" id="maint-active" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="admin-toggle-copy"><strong>Show notice</strong><small>Stacks below the promo banner if both are active</small></span>
+            </label>
+            <div class="admin-grid-2">
+              <div class="admin-field">
+                <label for="maint-icon">Icon</label>
+                <input type="text" id="maint-icon" maxlength="2" />
+              </div>
+              <div class="admin-field">
+                <label for="maint-text">Notice text</label>
+                <input type="text" id="maint-text" />
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">🎁</span>
+              <div>
+                <h2 class="admin-card-title">Free Beats Widget</h2>
+                <p class="admin-card-desc">The sticky side tab and exit-intent popup that promote the free beats landing page.</p>
+              </div>
+            </div>
+            <label class="admin-toggle">
+              <span class="toggle-switch">
+                <input type="checkbox" id="fbw-enabled" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="admin-toggle-copy"><strong>Enable widget</strong><small>Turning this off removes it from the page entirely</small></span>
+            </label>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">🛒</span>
+              <div>
+                <h2 class="admin-card-title">Social Proof Popups</h2>
+                <p class="admin-card-desc">The rotating "User from X just purchased…" notifications shown bottom-left.</p>
+              </div>
+            </div>
+            <label class="admin-toggle">
+              <span class="toggle-switch">
+                <input type="checkbox" id="sp-enabled" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="admin-toggle-copy"><strong>Enable popups</strong><small>Off removes the widget from the page entirely</small></span>
+            </label>
+            <div class="admin-field">
+              <label for="sp-interval">Interval between popups (seconds)</label>
+              <input type="number" id="sp-interval" min="10" max="600" step="5" />
+              <p class="admin-field-hint">How long to wait between each notification. 30s is a natural pace — lower values feel pushier.</p>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">$</span>
+              <div>
+                <h2 class="admin-card-title">License Prices</h2>
+                <p class="admin-card-desc">The prices shown on the licensing cards. Enter the full display string, including "$" or "From".</p>
+              </div>
+            </div>
+            <div class="admin-grid-2">
+              <div class="admin-field">
+                <label for="price-basic">Basic</label>
+                <input type="text" id="price-basic" placeholder="$29.99" />
+              </div>
+              <div class="admin-field">
+                <label for="price-professional">Professional</label>
+                <input type="text" id="price-professional" placeholder="$59.99" />
+              </div>
+              <div class="admin-field">
+                <label for="price-unlimited">Unlimited</label>
+                <input type="text" id="price-unlimited" placeholder="$99.99" />
+              </div>
+              <div class="admin-field">
+                <label for="price-exclusive">Exclusive Rights</label>
+                <input type="text" id="price-exclusive" placeholder="From $299.99+" />
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">📊</span>
+              <div>
+                <h2 class="admin-card-title">Hero Stats</h2>
+                <p class="admin-card-desc">The three highlight numbers pinned to the bottom of the homepage hero.</p>
+              </div>
+            </div>
+            <div class="admin-grid-2">
+              <div class="admin-field">
+                <label for="stat-beats">Beats available</label>
+                <input type="text" id="stat-beats" />
+              </div>
+              <div class="admin-field">
+                <label for="stat-years">Years experience</label>
+                <input type="text" id="stat-years" />
+              </div>
+            </div>
+            <div class="admin-field">
+              <label for="stat-artists">Artists purchased</label>
+              <input type="text" id="stat-artists" />
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">✉</span>
+              <div>
+                <h2 class="admin-card-title">Contact</h2>
+                <p class="admin-card-desc">Updates the email shown — and linked — in the contact section.</p>
+              </div>
+            </div>
+            <div class="admin-field">
+              <label for="contact-email">Contact email</label>
+              <input type="email" id="contact-email" />
+            </div>
+          </div>
+
+          <div class="admin-card admin-card--wide">
+            <div class="admin-card-head">
+              <span class="admin-card-icon" aria-hidden="true">🎮</span>
+              <div>
+                <h2 class="admin-card-title">Games — Scheduling</h2>
+                <p class="admin-card-desc">The games aren't built yet — these settings will control when they auto-activate once they're implemented. Set them up now and they'll switch on/off right on schedule.</p>
+              </div>
+            </div>
+
+            <p class="admin-subhead">Spin the Wheel</p>
+            <label class="admin-toggle">
+              <span class="toggle-switch">
+                <input type="checkbox" id="game-wheel-active" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="admin-toggle-copy"><strong>Active</strong><small>Within the start/end window below, once built</small></span>
+            </label>
+            <div class="admin-grid-2">
+              <div class="admin-field">
+                <label for="game-wheel-start">Start</label>
+                <input type="datetime-local" id="game-wheel-start" />
+              </div>
+              <div class="admin-field">
+                <label for="game-wheel-end">End</label>
+                <input type="datetime-local" id="game-wheel-end" />
+              </div>
+            </div>
+
+            <p class="admin-subhead">Scratch Card</p>
+            <label class="admin-toggle">
+              <span class="toggle-switch">
+                <input type="checkbox" id="game-scratch-active" />
+                <span class="toggle-track"></span>
+                <span class="toggle-thumb"></span>
+              </span>
+              <span class="admin-toggle-copy"><strong>Active</strong><small>Within the start/end window below, once built</small></span>
+            </label>
+            <div class="admin-grid-2">
+              <div class="admin-field">
+                <label for="game-scratch-start">Start</label>
+                <input type="datetime-local" id="game-scratch-start" />
+              </div>
+              <div class="admin-field">
+                <label for="game-scratch-end">End</label>
+                <input type="datetime-local" id="game-scratch-end" />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="admin-actions">
+          <button type="submit" class="btn btn-primary" id="admin-save-btn">Save Changes</button>
+          <span id="admin-status"></span>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* Must match CONFIG_URL in js/remote-config.js — same Apps Script deployment */
+    var CONFIG_URL = 'https://script.google.com/macros/s/AKfycbwn1ANfBybhKbf6eiWHmCkva__4aqc98-kccamF9Ix79SwWMn_6fhKC7lwOpEoT5di4qA/exec';
+    var SESSION_KEY = 'dc_admin_pw';
+
+    var loginEl     = document.getElementById('admin-login');
+    var dashEl      = document.getElementById('admin-dashboard');
+    var pwInput     = document.getElementById('admin-password-input');
+    var loginBtn    = document.getElementById('admin-login-btn');
+    var loginError  = document.getElementById('admin-login-error');
+    var form        = document.getElementById('admin-form');
+    var statusEl    = document.getElementById('admin-status');
+    var saveBtn     = document.getElementById('admin-save-btn');
+
+    var currentConfig = null; // last config fetched from the server — full object, sent back merged
+
+    /* ── ISO <-> datetime-local helpers ─────────────────────── */
+    function isoToLocal(iso) {
+      if (!iso) return '';
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return '';
+      var pad = function (n) { return String(n).padStart(2, '0'); };
+      return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) +
+             'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+    function localToIso(local) {
+      if (!local) return '';
+      var d = new Date(local);
+      if (isNaN(d.getTime())) return '';
+      return d.toISOString();
+    }
+
+    /* ── Populate form from a config object ─────────────────── */
+    function populateForm(cfg) {
+      var promo = cfg.promoBanner || {};
+      document.getElementById('promo-active').checked   = !!promo.active;
+      document.getElementById('promo-text').value       = promo.text || '';
+      document.getElementById('promo-cta-label').value  = promo.ctaLabel || '';
+      document.getElementById('promo-cta-href').value   = promo.ctaHref || '';
+
+      var maint = cfg.maintenanceNotice || {};
+      document.getElementById('maint-active').checked = !!maint.active;
+      document.getElementById('maint-icon').value     = maint.icon || '';
+      document.getElementById('maint-text').value     = maint.text || '';
+
+      var fbw = cfg.freeBeatsWidget || {};
+      document.getElementById('fbw-enabled').checked = fbw.enabled !== false;
+
+      var sp = cfg.socialProof || {};
+      document.getElementById('sp-enabled').checked = sp.enabled !== false;
+      document.getElementById('sp-interval').value  = sp.intervalSeconds || 30;
+
+      var prices = cfg.licensePrices || {};
+      document.getElementById('price-basic').value        = prices.basic || '';
+      document.getElementById('price-professional').value = prices.professional || '';
+      document.getElementById('price-unlimited').value    = prices.unlimited || '';
+      document.getElementById('price-exclusive').value    = prices.exclusive || '';
+
+      var games = cfg.gamesConfig || {};
+      var wheel = games.spinTheWheel || {};
+      var scratch = games.scratchCard || {};
+      document.getElementById('game-wheel-active').checked = !!wheel.active;
+      document.getElementById('game-wheel-start').value    = isoToLocal(wheel.startDate);
+      document.getElementById('game-wheel-end').value      = isoToLocal(wheel.endDate);
+      document.getElementById('game-scratch-active').checked = !!scratch.active;
+      document.getElementById('game-scratch-start').value    = isoToLocal(scratch.startDate);
+      document.getElementById('game-scratch-end').value      = isoToLocal(scratch.endDate);
+
+      var stats = cfg.heroStats || {};
+      document.getElementById('stat-beats').value   = stats.beatsAvailable || '';
+      document.getElementById('stat-years').value   = stats.yearsExperience || '';
+      document.getElementById('stat-artists').value = stats.artistsPurchased || '';
+
+      document.getElementById('contact-email').value = cfg.contactEmail || '';
+    }
+
+    /* ── Build the full config object to send back ──────────── */
+    function buildConfigFromForm() {
+      var base = currentConfig || {};
+      return {
+        version: base.version || 1,
+        promoBanner: {
+          active:   document.getElementById('promo-active').checked,
+          text:     document.getElementById('promo-text').value,
+          ctaLabel: document.getElementById('promo-cta-label').value,
+          ctaHref:  document.getElementById('promo-cta-href').value
+        },
+        maintenanceNotice: {
+          active: document.getElementById('maint-active').checked,
+          icon:   document.getElementById('maint-icon').value,
+          text:   document.getElementById('maint-text').value
+        },
+        freeBeatsWidget: {
+          enabled: document.getElementById('fbw-enabled').checked
+        },
+        socialProof: {
+          enabled:         document.getElementById('sp-enabled').checked,
+          intervalSeconds: Number(document.getElementById('sp-interval').value) || 30
+        },
+        licensePrices: {
+          basic:        document.getElementById('price-basic').value,
+          professional: document.getElementById('price-professional').value,
+          unlimited:    document.getElementById('price-unlimited').value,
+          exclusive:    document.getElementById('price-exclusive').value
+        },
+        gamesConfig: {
+          spinTheWheel: {
+            active:    document.getElementById('game-wheel-active').checked,
+            startDate: localToIso(document.getElementById('game-wheel-start').value),
+            endDate:   localToIso(document.getElementById('game-wheel-end').value)
+          },
+          scratchCard: {
+            active:    document.getElementById('game-scratch-active').checked,
+            startDate: localToIso(document.getElementById('game-scratch-start').value),
+            endDate:   localToIso(document.getElementById('game-scratch-end').value)
+          }
+        },
+        heroStats: {
+          beatsAvailable:   document.getElementById('stat-beats').value,
+          yearsExperience:  document.getElementById('stat-years').value,
+          artistsPurchased: document.getElementById('stat-artists').value
+        },
+        contactEmail: document.getElementById('contact-email').value
+      };
+    }
+
+    function setStatus(msg, type) {
+      statusEl.textContent = msg;
+      statusEl.className = type ? 'is-' + type : '';
+    }
+
+    /* ── Load current config (bypasses the public cache) ────── */
+    function loadConfig() {
+      setStatus('Loading current settings…', '');
+      fetch(CONFIG_URL).then(function (res) { return res.json(); }).then(function (cfg) {
+        currentConfig = cfg;
+        populateForm(cfg);
+        setStatus('', '');
+      }).catch(function () {
+        setStatus('Could not load current settings — check CONFIG_URL.', 'error');
+      });
+    }
+
+    /* ── Login ───────────────────────────────────────────────
+       The password is validated server-side (Apps Script checks it
+       against ADMIN_PASSWORD via a { action: 'validate' } request,
+       writing nothing) before the dashboard is ever revealed. */
+    function showDashboard() {
+      loginEl.style.display = 'none';
+      dashEl.classList.add('is-visible');
+      loadConfig();
+    }
+
+    function attemptLogin() {
+      var pw = pwInput.value.trim();
+      if (!pw) { loginError.textContent = 'Enter a password.'; return; }
+
+      loginError.textContent = '';
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Checking…';
+
+      fetch(CONFIG_URL, {
+        method: 'POST',
+        // text/plain avoids a CORS preflight the Apps Script can't answer
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ password: pw, action: 'validate' })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (result) {
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Continue';
+          if (result && result.ok) {
+            sessionStorage.setItem(SESSION_KEY, pw);
+            showDashboard();
+          } else {
+            loginError.textContent = (result && result.error) || 'Incorrect password.';
+            pwInput.value = '';
+            pwInput.focus();
+          }
+        })
+        .catch(function () {
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Continue';
+          loginError.textContent = 'Network error — could not reach the Apps Script.';
+        });
+    }
+
+    loginBtn.addEventListener('click', attemptLogin);
+    pwInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') loginBtn.click();
+    });
+
+    /* ── Save ────────────────────────────────────────────────
+       Sends the password with every write; the Apps Script is
+       the real authority — wrong password comes back as ok:false. */
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var pw = sessionStorage.getItem(SESSION_KEY) || '';
+      var config = buildConfigFromForm();
+
+      saveBtn.disabled = true;
+      setStatus('Saving…', '');
+
+      fetch(CONFIG_URL, {
+        method: 'POST',
+        // text/plain avoids a CORS preflight the Apps Script can't answer
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ password: pw, config: config })
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (result) {
+          saveBtn.disabled = false;
+          if (result && result.ok) {
+            currentConfig = result.config || config;
+            setStatus('Saved ✓', 'ok');
+          } else {
+            setStatus((result && result.error) || 'Incorrect password — try again.', 'error');
+            // Wrong password: re-lock so the user re-enters it
+            sessionStorage.removeItem(SESSION_KEY);
+            dashEl.classList.remove('is-visible');
+            loginEl.style.display = 'block';
+            pwInput.value = '';
+            pwInput.focus();
+          }
+        })
+        .catch(function () {
+          saveBtn.disabled = false;
+          setStatus('Network error — could not reach the Apps Script.', 'error');
+        });
+    });
+
+    /* ── Resume session ──────────────────────────────────────
+       sessionStorage only — clears when the browser tab closes. */
+    if (sessionStorage.getItem(SESSION_KEY)) showDashboard();
+  })();
+  </script>
+</body>
+</html>

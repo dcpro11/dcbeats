@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- !! EDIT !! Change title, description and canonical for every post -->
+  <title>!! POST TITLE !! — DC Beats Blog</title>
+  <meta name="description" content="!! 1-2 sentence description of the post, max 160 chars !!" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/blog/!! slug !!.html" />
+
+  <meta property="og:type"        content="article" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/blog/!! slug !!.html" />
+  <meta property="og:title"       content="!! POST TITLE !! — DC Beats" />
+  <meta property="og:description" content="!! Same as meta description !!" />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="!! POST TITLE !!" />
+  <meta name="twitter:description" content="!! Same as meta description !!" />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Note: paths use ../../ because this file is inside pages/blog/ -->
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/cookies.css" />
+  <link rel="stylesheet" href="../../css/blog.css" />
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<main class="post-wrap">
+
+  <a href="../blog.html" class="post-back">← All posts</a>
+
+  <!-- POST HEADER -->
+  <header class="post-header">
+    <!-- !! EDIT !! Add tags that match what you put in blog-posts.js -->
+    <div class="post-tags">
+      <span class="blog-tag">!! tag-1 !!</span>
+      <span class="blog-tag">!! tag-2 !!</span>
+    </div>
+
+    <!-- !! EDIT !! Post title -->
+    <h1 class="post-title">!! Post Title Goes Here !!</h1>
+
+    <div class="post-meta">
+      <!-- !! EDIT !! Date in "Month D, YYYY" format -->
+      <span>!! May 23, 2026 !!</span>
+      <!-- !! EDIT !! Estimated reading time -->
+      <span class="post-meta-sep">·</span>
+      <span>!! 4 !! min read</span>
+    </div>
+  </header>
+
+  <div class="post-divider"></div>
+
+  <!-- !! EDIT !! Write your post content below.
+       Use <h2> for main sections, <h3> for sub-sections.
+       Available special element: <div class="callout"><strong>Note</strong> text</div>
+  -->
+  <article class="post-content">
+
+    <p>
+      !! Introduction paragraph. Hook the reader, state what they'll learn. !!
+    </p>
+
+    <h2>!! Section One !!</h2>
+
+    <p>
+      !! Body text. !!
+    </p>
+
+    <h2>!! Section Two !!</h2>
+
+    <p>
+      !! Body text. !!
+    </p>
+
+    <div class="callout">
+      <strong>Key takeaway</strong>
+      !! An important point to highlight. !!
+    </div>
+
+    <h2>!! Conclusion !!</h2>
+
+    <p>
+      !! Wrap up and call to action. !!
+    </p>
+
+  </article>
+
+  <!-- SHARE -->
+  <div class="post-share">
+    <p class="post-share-label">// Share this post</p>
+    <button class="share-trigger" id="share-trigger">Share Article →</button>
+  </div>
+
+  <!-- POST FOOTER -->
+  <footer class="post-footer">
+    <a href="../blog.html" class="post-footer-back">← Back to all posts</a>
+    <a href="../beatstore.html" class="post-footer-cta">Browse Beats →</a>
+  </footer>
+
+</main>
+
+<!-- SHARE MODAL -->
+<div class="share-overlay" id="share-overlay"></div>
+<div class="share-modal" id="share-modal" role="dialog" aria-modal="true" aria-label="Share this article">
+  <div class="share-modal-handle"></div>
+  <button class="share-modal-close" id="share-modal-close" aria-label="Close">✕</button>
+  <p class="share-modal-title">// Share this article</p>
+  <div class="share-options">
+    <button class="share-option" id="share-x">
+      <span class="share-option-icon">𝕏</span>
+      X / Twitter
+    </button>
+    <button class="share-option" id="share-whatsapp">
+      <span class="share-option-icon">💬</span>
+      WhatsApp
+    </button>
+    <button class="share-option" id="share-instagram">
+      <span class="share-option-icon">📸</span>
+      Instagram Story
+    </button>
+    <button class="share-option" id="share-copy">
+      <span class="share-option-icon">🔗</span>
+      Copy Link
+    </button>
+  </div>
+  <p class="share-ig-note" id="share-ig-note"></p>
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../../js/site.js"></script>
+<script src="../../js/cookies.js"></script>
+<script src="../../js/main.js"></script>
+<script>
+(function () {
+  var url   = encodeURIComponent(window.location.href);
+  var title = encodeURIComponent(document.title);
+  var text  = encodeURIComponent('Check this out: ' + document.title + ' — ' + window.location.href);
+
+  var trigger   = document.getElementById('share-trigger');
+  var overlay   = document.getElementById('share-overlay');
+  var modal     = document.getElementById('share-modal');
+  var closeBtn  = document.getElementById('share-modal-close');
+  var igNote    = document.getElementById('share-ig-note');
+
+  function openModal() {
+    overlay.classList.add('open');
+    modal.style.display = 'block';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { modal.classList.add('open'); });
+    });
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function () { modal.style.display = ''; }, 300);
+    igNote.textContent = '';
+  }
+
+  trigger.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  document.getElementById('share-x').addEventListener('click', function () {
+    window.open('https://twitter.com/intent/tweet?url=' + url + '&text=' + title, '_blank', 'noopener,width=600,height=400');
+  });
+
+  document.getElementById('share-whatsapp').addEventListener('click', function () {
+    window.open('https://api.whatsapp.com/send?text=' + text, '_blank', 'noopener');
+  });
+
+  document.getElementById('share-instagram').addEventListener('click', function () {
+    if (navigator.share) {
+      navigator.share({ title: document.title, url: window.location.href })
+        .then(function () { closeModal(); })
+        .catch(function () {});
+    } else {
+      navigator.clipboard.writeText(window.location.href).then(function () {
+        igNote.textContent = 'Link copied! Open Instagram on your phone → Stories → link sticker → paste.';
+      });
+    }
+  });
+
+  document.getElementById('share-copy').addEventListener('click', function () {
+    var btn = document.getElementById('share-copy');
+    navigator.clipboard.writeText(window.location.href).then(function () {
+      btn.classList.add('copied');
+      btn.querySelector('.share-option-icon').textContent = '✓';
+      setTimeout(function () {
+        btn.classList.remove('copied');
+        btn.querySelector('.share-option-icon').textContent = '🔗';
+      }, 2000);
+    });
+  });
+})();
+</script>
+</body>
+</html>

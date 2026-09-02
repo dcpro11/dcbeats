@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Song Structure Planner — DC Beats</title>
+  <meta name="description" content="Plan your song arrangement visually. Add sections (Intro, Verse, Chorus, Bridge…), set bar counts and BPM to see the total track duration — free tool by DC Beats." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/song-structure.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/song-structure.html" />
+  <meta property="og:title"       content="Song Structure Planner — DC Beats" />
+  <meta property="og:description" content="Free song structure builder. Arrange your sections, set BPM and get the full track duration instantly." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Song Structure Planner — DC Beats" />
+  <meta name="twitter:description" content="Plan your song arrangement visually. BPM, bars, sections — all in one place." />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
+
+  <style>
+    :root {
+      --bg:        #0a0a0a;
+      --surface:   #111111;
+      --surface2:  #161616;
+      --border:    #1e1e1e;
+      --border-mid:#2a2a2a;
+      --gold:      #c8a96e;
+      --gold-dim:  #7a6440;
+      --text:      #e8e4dc;
+      --muted:     #6b6560;
+
+      /* Section colors */
+      --col-intro:      #5b8dd9;
+      --col-verse:      #7a7a9a;
+      --col-prechorus:  #9a7a9a;
+      --col-chorus:     #c8a96e;
+      --col-hook:       #d4855a;
+      --col-bridge:     #5a9a7a;
+      --col-breakdown:  #6a5a4a;
+      --col-solo:       #9a5a5a;
+      --col-outro:      #4a6a7a;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+
+    .tool-wrap { max-width: 700px; margin: 0 auto; padding: 96px 24px 80px; }
+
+    .tool-back { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; margin-bottom: 40px; transition: color 0.2s; }
+    .tool-back:hover { color: var(--gold); }
+
+    .tool-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 12px; }
+
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: var(--text); margin-bottom: 12px; }
+    h1 span { color: var(--gold); }
+
+    .tool-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.7; margin-bottom: 40px; }
+
+    /* ── BPM + METER ── */
+    .bpm-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .bpm-field { display: flex; align-items: center; gap: 10px; }
+    .bpm-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+
+    .bpm-input {
+      width: 80px;
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text);
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    .bpm-input::-webkit-inner-spin-button, .bpm-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .bpm-input:focus { border-color: var(--gold-dim); }
+
+    .total-dur {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--gold);
+      margin-left: auto;
+    }
+
+    .total-dur-label { font-size: 0.62rem; color: var(--muted); display: block; margin-bottom: 2px; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
+
+    /* ── SECTION PALETTE ── */
+    .palette-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+
+    .palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .palette-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.12s;
+      color: #fff;
+      opacity: 0.85;
+    }
+
+    .palette-btn:hover { opacity: 1; transform: translateY(-1px); }
+    .palette-btn:active { transform: scale(0.97); }
+
+    /* ── STRUCTURE LIST ── */
+    .structure-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 120px;
+      margin-bottom: 24px;
+    }
+
+    .structure-empty {
+      text-align: center;
+      padding: 28px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .structure-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-row {
+      display: grid;
+      grid-template-columns: 14px 1fr auto auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      animation: fadeIn 0.2s ease both;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+
+    .section-color-bar { width: 4px; height: 32px; border-radius: 2px; flex-shrink: 0; }
+
+    .section-name-input {
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      outline: none;
+      width: 100%;
+    }
+
+    .section-bars-input {
+      width: 52px;
+      background: var(--surface2);
+      border: 1px solid var(--border-mid);
+      border-radius: 5px;
+      padding: 4px 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text);
+      text-align: center;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+    .section-bars-input::-webkit-inner-spin-button, .section-bars-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .section-bars-input:focus { border-color: var(--gold-dim); }
+
+    .section-dur { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); width: 44px; text-align: right; }
+
+    .section-actions { display: flex; gap: 4px; }
+
+    .sec-btn {
+      background: none;
+      border: 1px solid var(--border-mid);
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      line-height: 1;
+    }
+
+    .sec-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .sec-btn.del:hover { border-color: #e05a5a; color: #e05a5a; }
+
+    /* ── VISUAL TIMELINE BAR ── */
+    .visual-bar-wrap { margin-bottom: 24px; }
+    .visual-bar-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .visual-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; gap: 2px; }
+    .visual-segment { height: 100%; transition: flex 0.3s; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .visual-segment-label { font-size: 0.6rem; font-weight: 600; color: rgba(255,255,255,0.85); white-space: nowrap; overflow: hidden; text-overflow: clip; padding: 0 4px; }
+
+    /* ── ACTIONS ROW ── */
+    .actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+
+    .action-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 10px 16px;
+      background: none;
+      border: 1px solid var(--border-mid);
+      border-radius: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      text-align: center;
+    }
+
+    .action-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .action-btn.copied { border-color: #4caf7d; color: #4caf7d; }
+  </style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<div class="tool-wrap">
+
+  <a href="tools.html" class="tool-back">← Tools</a>
+
+  <p class="tool-label">// Producer Tool</p>
+  <h1>Song <span>Structure</span><br>Planner</h1>
+  <p class="tool-sub">Build your arrangement visually. Add sections, set bar counts and watch the total duration update in real time.</p>
+
+  <!-- BPM ROW -->
+  <div class="bpm-row">
+    <div class="bpm-field">
+      <label class="bpm-label" for="bpm-input">BPM</label>
+      <input class="bpm-input" type="number" id="bpm-input" value="120" min="40" max="300" />
+    </div>
+    <div class="bpm-field">
+      <label class="bpm-label" for="meter-input">Meter</label>
+      <input class="bpm-input" type="number" id="meter-input" value="4" min="2" max="8" style="width:60px" />
+    </div>
+    <div class="total-dur">
+      <span class="total-dur-label">Total duration</span>
+      <span id="total-duration">0:00</span>
+    </div>
+  </div>
+
+  <!-- PALETTE -->
+  <p class="palette-label">// Add a section</p>
+  <div class="palette" id="palette"></div>
+
+  <!-- STRUCTURE -->
+  <div class="structure-wrap" id="structure-wrap">
+    <p class="structure-empty" id="structure-empty">// Click a section above to start building your arrangement</p>
+    <div class="structure-list" id="structure-list" style="display:none"></div>
+  </div>
+
+  <!-- VISUAL BAR -->
+  <div class="visual-bar-wrap" id="visual-bar-wrap" style="display:none">
+    <p class="visual-bar-label">// Visual arrangement</p>
+    <div class="visual-bar" id="visual-bar"></div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions-row">
+    <button class="action-btn" id="copy-btn">Copy as text</button>
+    <button class="action-btn" id="clear-btn">Clear all</button>
+  </div>
+
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var SECTION_TYPES = [
+    { key: 'intro',      label: 'Intro',      color: '#5b8dd9', defaultBars: 4  },
+    { key: 'verse',      label: 'Verse',      color: '#7a7a9a', defaultBars: 16 },
+    { key: 'prechorus',  label: 'Pre-Chorus', color: '#9a7a9a', defaultBars: 8  },
+    { key: 'chorus',     label: 'Chorus',     color: '#c8a96e', defaultBars: 16 },
+    { key: 'hook',       label: 'Hook',       color: '#d4855a', defaultBars: 8  },
+    { key: 'bridge',     label: 'Bridge',     color: '#5a9a7a', defaultBars: 8  },
+    { key: 'breakdown',  label: 'Breakdown',  color: '#6a5a4a', defaultBars: 8  },
+    { key: 'solo',       label: 'Solo',       color: '#9a5a5a', defaultBars: 8  },
+    { key: 'outro',      label: 'Outro',      color: '#4a6a7a', defaultBars: 8  },
+  ];
+
+  var sections = []; // { id, key, label, color, bars }
+  var idCounter = 0;
+
+  function typeOf(key) { return SECTION_TYPES.find(function (t) { return t.key === key; }); }
+
+  // ── Build palette
+  var palette = document.getElementById('palette');
+  SECTION_TYPES.forEach(function (t) {
+    var btn = document.createElement('button');
+    btn.className = 'palette-btn';
+    btn.style.background = t.color;
+    btn.textContent = '+ ' + t.label;
+    btn.addEventListener('click', function () { addSection(t.key); });
+    palette.appendChild(btn);
+  });
+
+  function addSection(key) {
+    var t = typeOf(key);
+    sections.push({ id: ++idCounter, key: key, label: t.label, color: t.color, bars: t.defaultBars });
+    render();
+  }
+
+  function getBPM() { return Math.max(40, Math.min(300, parseInt(document.getElementById('bpm-input').value, 10) || 120)); }
+  function getMeter() { return Math.max(2, Math.min(8, parseInt(document.getElementById('meter-input').value, 10) || 4)); }
+
+  function barsToSeconds(bars) {
+    var bpm   = getBPM();
+    var meter = getMeter();
+    return (bars * meter * 60) / bpm;
+  }
+
+  function secToMMSS(s) {
+    var m = Math.floor(s / 60);
+    var sec = Math.round(s % 60);
+    return m + ':' + String(sec).padStart(2, '0');
+  }
+
+  function render() {
+    var list    = document.getElementById('structure-list');
+    var empty   = document.getElementById('structure-empty');
+    var barWrap = document.getElementById('visual-bar-wrap');
+    var bar     = document.getElementById('visual-bar');
+
+    list.innerHTML = '';
+
+    if (sections.length === 0) {
+      list.style.display = 'none';
+      empty.style.display = '';
+      barWrap.style.display = 'none';
+      document.getElementById('total-duration').textContent = '0:00';
+      return;
+    }
+
+    empty.style.display = 'none';
+    list.style.display  = 'flex';
+    barWrap.style.display = 'block';
+
+    var totalSec  = 0;
+    var totalBars = 0;
+
+    sections.forEach(function (sec) {
+      totalSec  += barsToSeconds(sec.bars);
+      totalBars += sec.bars;
+    });
+
+    document.getElementById('total-duration').textContent = secToMMSS(totalSec);
+
+    // List rows
+    sections.forEach(function (sec, idx) {
+      var dur = barsToSeconds(sec.bars);
+      var row = document.createElement('div');
+      row.className = 'section-row';
+      row.style.background = sec.color + '14';
+      row.style.borderColor = sec.color + '30';
+      row.dataset.id = sec.id;
+
+      row.innerHTML =
+        '<div class="section-color-bar" style="background:' + sec.color + '"></div>' +
+        '<input class="section-name-input" value="' + sec.label + '" aria-label="Section name" />' +
+        '<input class="section-bars-input" type="number" value="' + sec.bars + '" min="1" max="256" aria-label="Bars" /> <span style="font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;color:var(--muted)">bars</span>' +
+        '<span class="section-dur">' + secToMMSS(dur) + '</span>' +
+        '<div class="section-actions">' +
+          '<button class="sec-btn up" title="Move up" aria-label="Move up">↑</button>' +
+          '<button class="sec-btn dn" title="Move down" aria-label="Move down">↓</button>' +
+          '<button class="sec-btn del" title="Remove" aria-label="Remove">✕</button>' +
+        '</div>';
+
+      // Name edit
+      row.querySelector('.section-name-input').addEventListener('input', function (e) {
+        sec.label = e.target.value;
+        renderBar();
+      });
+
+      // Bars edit
+      row.querySelector('.section-bars-input').addEventListener('input', function (e) {
+        var v = parseInt(e.target.value, 10);
+        if (!isNaN(v) && v > 0) {
+          sec.bars = v;
+          render();
+        }
+      });
+
+      // Up
+      row.querySelector('.sec-btn.up').addEventListener('click', function () {
+        if (idx === 0) return;
+        var tmp = sections[idx]; sections[idx] = sections[idx - 1]; sections[idx - 1] = tmp;
+        render();
+      });
+
+      // Down
+      row.querySelector('.sec-btn.dn').addEventListener('click', function () {
+        if (idx === sections.length - 1) return;
+        var tmp = sections[idx]; sections[idx] = sections[idx + 1]; sections[idx + 1] = tmp;
+        render();
+      });
+
+      // Delete
+      row.querySelector('.sec-btn.del').addEventListener('click', function () {
+        sections.splice(idx, 1);
+        render();
+      });
+
+      list.appendChild(row);
+    });
+
+    renderBar(totalBars);
+  }
+
+  function renderBar(totalBars) {
+    var bar = document.getElementById('visual-bar');
+    bar.innerHTML = '';
+    if (!totalBars) { totalBars = sections.reduce(function (s, sec) { return s + sec.bars; }, 0); }
+    sections.forEach(function (sec) {
+      var seg = document.createElement('div');
+      seg.className = 'visual-segment';
+      seg.style.flex = sec.bars;
+      seg.style.background = sec.color;
+      var lbl = document.createElement('span');
+      lbl.className = 'visual-segment-label';
+      lbl.textContent = sec.label;
+      seg.appendChild(lbl);
+      bar.appendChild(seg);
+    });
+  }
+
+  // BPM / meter change
+  document.getElementById('bpm-input').addEventListener('input', render);
+  document.getElementById('meter-input').addEventListener('input', render);
+
+  // Copy as text
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var btn = document.getElementById('copy-btn');
+    var bpm = getBPM();
+    var lines = ['SONG STRUCTURE — ' + bpm + ' BPM', ''];
+    var cumSec = 0;
+    sections.forEach(function (sec) {
+      var dur = barsToSeconds(sec.bars);
+      lines.push('[' + secToMMSS(cumSec) + '] ' + sec.label + ' — ' + sec.bars + ' bars (' + secToMMSS(dur) + ')');
+      cumSec += dur;
+    });
+    lines.push('');
+    lines.push('Total: ' + secToMMSS(cumSec));
+    navigator.clipboard.writeText(lines.join('\n')).then(function () {
+      btn.textContent = '✓ Copied';
+      btn.classList.add('copied');
+      setTimeout(function () { btn.textContent = 'Copy as text'; btn.classList.remove('copied'); }, 2000);
+    });
+  });
+
+  // Clear
+  document.getElementById('clear-btn').addEventListener('click', function () {
+    if (sections.length === 0) return;
+    if (confirm('Clear all sections?')) { sections = []; render(); }
+  });
+
+  // Default arrangement
+  ['intro','verse','prechorus','chorus','verse','prechorus','chorus','bridge','chorus','outro'].forEach(function (k) { addSection(k); });
+})();
+</script>
+</body>
+</html>

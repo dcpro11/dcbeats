@@ -3,8 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="DC Beats — Professional Mixing & Mastering services. Hear the difference with before/after audio examples." />
-  <title>Mixing & Mastering — DC Beats</title>
+  <meta name="description" content="Professional Mixing & Mastering by DC Beats. Full song mix, beat mixing and vocal mixing — release-ready sound for streaming, radio and clubs." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/mixing-mastering.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/mixing-mastering.html" />
+  <meta property="og:title"       content="Mixing & Mastering — DC Beats" />
+  <meta property="og:description" content="Professional Mixing & Mastering by DC Beats. Full song mix, beat mixing and vocal mixing — release-ready sound for streaming, radio and clubs." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta property="og:locale"      content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Mixing & Mastering — DC Beats" />
+  <meta name="twitter:description" content="Professional Mixing & Mastering by DC Beats. Full song mix, beat mixing and vocal mixing — release-ready sound." />
+  <meta name="twitter:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <title>Mixing &amp; Mastering — DC Beats</title>
+
+  <!-- Performance -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,27 +38,8 @@
 
 <body>
 
-  <!-- ============================================================
-       NAVIGATION
-  ============================================================ -->
-  <nav id="nav" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <a href="../index.html" class="nav-logo" aria-label="DC Beats — Home">
-        <img src="../assets/logo.png" alt="DC Beats" />
-      </a>
-      <ul class="nav-links" role="list">
-        <li><a href="../index.html#beats">Beats</a></li>
-        <li><a href="../index.html#licensing">Licensing</a></li>
-        <li><a href="../index.html#about">About</a></li>
-        <li><a href="../index.html#services">Services</a></li>
-        <li><a href="../index.html#contact">Contact</a></li>
-        <li><a href="../index.html#beats" class="nav-cta">Shop Now</a></li>
-      </ul>
-      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+  <!-- Navigation — injected by js/site.js -->
+  <nav id="nav" role="navigation" aria-label="Main navigation"></nav>
 
 
   <!-- ============================================================
@@ -72,13 +75,9 @@
       </h1>
 
       <p class="mx-hero-sub">
-        Professional sound that holds up anywhere — streaming, radio, clubs.
-        Hear the difference below.
+        From raw stems to a release-ready master — explore the services below
+        and hear the difference for yourself.
       </p>
-
-      <a href="#contact-cta" class="btn btn-primary">
-        Get a Quote <span class="btn-arrow">→</span>
-      </a>
 
     </div>
   </div>
@@ -541,7 +540,7 @@
           <a href="../index.html#contact" class="btn btn-primary" style="font-size: 0.85rem; padding: 1rem 2.2rem;">
             Get in Touch <span class="btn-arrow">→</span>
           </a>
-          <p class="mx-contact-note">Or email directly: <a href="mailto:contact@dcbeats.net">contact@dcbeats.net</a></p>
+          <p class="mx-contact-note">Or email directly: <a href="mailto:info@dcbeats.net">info@dcbeats.net</a></p>
         </div>
       </div>
 
@@ -549,51 +548,18 @@
   </section>
 
 
-  <!-- ============================================================
-       FOOTER
-  ============================================================ -->
-  <footer id="footer">
-    <div class="container">
-      <div class="footer-top">
-        <div>
-          <a href="../index.html" class="footer-logo"><img src="../assets/logo.png" alt="DC Beats" /></a>
-          <p class="footer-tagline">Premium Instrumentals · Portugal</p>
-        </div>
-        <nav class="footer-nav" aria-label="Footer navigation">
-          <div class="footer-nav-col">
-            <h4>Services</h4>
-            <ul>
-              <li><a href="../index.html#services">Custom Beats</a></li>
-              <li><a href="mixing-mastering.html">Mixing &amp; Mastering</a></li>
-              <li><a href="../index.html#services">Full Production</a></li>
-            </ul>
-          </div>
-          <div class="footer-nav-col">
-            <h4>Legal</h4>
-            <ul>
-              <li><a href="privacy-policy.html">Privacy Policy</a></li>
-              <li><a href="terms-of-use.html">Terms of Use</a></li>
-              <li><a href="refund-policy.html">Refund Policy</a></li>
-            </ul>
-          </div>
-        </nav>
-      </div>
-      <div class="footer-bottom">
-        <p class="footer-copy">&copy; <span id="year"></span> DC Beats. All rights reserved.</p>
-        <div class="footer-social">
-          <a href="https://instagram.com/dcbeats" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://youtube.com/@dcbeats" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://www.beatstars.com/dcbeats" target="_blank" rel="noopener">BeatStars</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
+  <!-- Footer — injected by js/site.js -->
+  <footer id="footer"></footer>
 
   <!-- ============================================================
        SCRIPTS
+       1. site.js   — injects nav, footer, cookie banner
+       2. cookies.js — attaches cookie consent handlers
+       3. main.js   — attaches scroll, nav toggle, A/B players
   ============================================================ -->
+  <script src="../js/site.js"></script>
   <script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
   <script src="../js/main.js"></script>
 
 </body>

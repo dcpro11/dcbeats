@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BPM, Musical Key and the Camelot Wheel: The Producer's Cheat Sheet — DC Beats Blog</title>
+  <meta name="description" content="Tempo and key are the two invisible forces that determine whether tracks feel right together. This cheat sheet breaks both down — with a full Camelot wheel reference you can bookmark." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/blog/bpm-key-camelot-wheel-explained.html" />
+
+  <meta property="og:type"        content="article" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/blog/bpm-key-camelot-wheel-explained.html" />
+  <meta property="og:title"       content="BPM, Musical Key and the Camelot Wheel: The Producer's Cheat Sheet — DC Beats" />
+  <meta property="og:description" content="Tempo and key are the two invisible forces that determine whether tracks feel right together. This cheat sheet breaks both down — with a full Camelot wheel reference you can bookmark." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="BPM, Musical Key and the Camelot Wheel: The Producer's Cheat Sheet" />
+  <meta name="twitter:description" content="Tempo and key explained for producers and artists — with a full Camelot wheel reference." />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/cookies.css" />
+  <link rel="stylesheet" href="../../css/blog.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "BPM, Musical Key and the Camelot Wheel: The Producer's Cheat Sheet",
+    "datePublished": "2026-04-22",
+    "author": { "@type": "Person", "name": "DC Beats" },
+    "description": "Tempo and key are the two invisible forces that determine whether tracks feel right together. This cheat sheet breaks both down — with a full Camelot wheel reference you can bookmark.",
+    "url": "https://dcbeats.net/pages/blog/bpm-key-camelot-wheel-explained.html"
+  }
+  </script>
+
+  <style>
+    /* ── Shared table styles ── */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.75rem 0;
+      font-size: 0.83rem;
+    }
+    .ref-table thead tr { background: rgba(200,169,110,0.07); }
+    .ref-table th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold, #c8a96e);
+      text-align: left;
+      padding: 0.6rem 0.9rem;
+      border-bottom: 1px solid rgba(200,169,110,0.2);
+    }
+    .ref-table td {
+      padding: 0.6rem 0.9rem;
+      color: #b8b4ac;
+      border-bottom: 1px solid rgba(200,169,110,0.08);
+      vertical-align: middle;
+      line-height: 1.5;
+    }
+    .ref-table tbody tr:last-child td { border-bottom: none; }
+    .ref-table tbody tr:hover td { background: rgba(200,169,110,0.03); }
+
+    /* ── BPM table ── */
+    .bpm-table td:first-child {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      color: #e8e4da;
+    }
+    .bpm-range {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--gold, #c8a96e);
+    }
+
+    /* ── Camelot wheel grid ── */
+    .camelot-grid {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr;
+      gap: 0;
+      border: 1px solid rgba(200,169,110,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      margin: 1.75rem 0;
+    }
+    .cg-header {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold, #c8a96e);
+      padding: 0.55rem 0.9rem;
+      background: rgba(200,169,110,0.07);
+      border-bottom: 1px solid rgba(200,169,110,0.2);
+    }
+    .cg-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--gold, #c8a96e);
+      padding: 0.55rem 0.9rem;
+      border-bottom: 1px solid rgba(200,169,110,0.08);
+      border-right: 1px solid rgba(200,169,110,0.08);
+      display: flex;
+      align-items: center;
+      background: rgba(200,169,110,0.03);
+    }
+    .cg-cell {
+      padding: 0.55rem 0.9rem;
+      border-bottom: 1px solid rgba(200,169,110,0.08);
+      color: #b8b4ac;
+      font-size: 0.83rem;
+      display: flex;
+      align-items: center;
+    }
+    .cg-cell:nth-child(3n) { border-left: 1px solid rgba(200,169,110,0.08); }
+    .cg-minor { color: #9fa0b8; }
+    .cg-major { color: #e8e4da; }
+    .cg-row-last .cg-num,
+    .cg-row-last .cg-cell { border-bottom: none; }
+    .cam-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      padding: 0.15rem 0.4rem;
+      border-radius: 1px;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+    .cam-badge--a { background: rgba(159,160,184,0.12); color: #9fa0b8; border: 1px solid rgba(159,160,184,0.2); }
+    .cam-badge--b { background: rgba(200,169,110,0.08); color: var(--gold, #c8a96e); border: 1px solid rgba(200,169,110,0.2); }
+  </style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<main class="post-wrap">
+
+  <a href="../blog.html" class="post-back">← All posts</a>
+
+  <header class="post-header">
+    <div class="post-tags">
+      <span class="blog-tag">music theory</span>
+      <span class="blog-tag">production</span>
+    </div>
+    <h1 class="post-title">BPM, Musical Key and the Camelot Wheel: The Producer's Cheat Sheet</h1>
+    <div class="post-meta">
+      <span>April 22, 2026</span>
+      <span class="post-meta-sep">·</span>
+      <span>5 min read</span>
+    </div>
+  </header>
+
+  <div class="post-divider"></div>
+
+  <article class="post-content">
+
+    <p>
+      Two numbers determine whether a track feels right: its tempo and its key. Get them wrong and layering vocals over a beat, combining two loops, or handing your track to a DJ becomes an exercise in frustration. Get them right and everything clicks immediately. This cheat sheet covers both — no music theory degree required — plus a complete Camelot Wheel reference you can bookmark and come back to every session.
+    </p>
+
+    <h2>What BPM Is and Why It Shapes Everything</h2>
+
+    <p>
+      BPM stands for Beats Per Minute — literally how many beats occur in 60 seconds. It's the metronome of a track, and it controls the physical feel of music more than any other single element. A 75 BPM beat moves slowly and heavily; a 128 BPM track pushes people onto the dance floor. The same chord progression, same melody, same vocal sample — at 80 BPM it sounds brooding, at 140 BPM it sounds euphoric.
+    </p>
+    <p>
+      Different genres cluster around specific BPM ranges. Knowing this tells you whether a beat you found will feel native to your style, or whether you'll be fighting the tempo the whole session.
+    </p>
+
+    <table class="ref-table bpm-table">
+      <thead>
+        <tr>
+          <th>Genre</th>
+          <th>Typical BPM Range</th>
+          <th>Feel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Trap</td>
+          <td><span class="bpm-range">65–80 BPM</span></td>
+          <td>Half-time, heavy, cinematic</td>
+        </tr>
+        <tr>
+          <td>Hip-Hop</td>
+          <td><span class="bpm-range">85–100 BPM</span></td>
+          <td>Classic boom-bap, head-nodding</td>
+        </tr>
+        <tr>
+          <td>R&amp;B / Soul</td>
+          <td><span class="bpm-range">60–80 BPM</span></td>
+          <td>Slow-groove, emotional</td>
+        </tr>
+        <tr>
+          <td>Afrobeats</td>
+          <td><span class="bpm-range">100–115 BPM</span></td>
+          <td>Rhythmic, percussive, danceable</td>
+        </tr>
+        <tr>
+          <td>Pop</td>
+          <td><span class="bpm-range">100–130 BPM</span></td>
+          <td>Energetic, commercial, broad</td>
+        </tr>
+        <tr>
+          <td>Dance / House</td>
+          <td><span class="bpm-range">120–130 BPM</span></td>
+          <td>Club-ready, driving four-on-the-floor</td>
+        </tr>
+        <tr>
+          <td>Drum &amp; Bass</td>
+          <td><span class="bpm-range">160–180 BPM</span></td>
+          <td>High-energy, frantic, kinetic</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      One important nuance: Trap is often produced at 65–80 BPM but <em>felt</em> at double that tempo. Producers sometimes work at 140–160 BPM and call it "Trap tempo" — it depends on whether the kick is on the half or full grid. Always listen, don't just read the number.
+    </p>
+
+    <h2>What Musical Key Means — Major vs Minor</h2>
+
+    <p>
+      A musical key is the tonal home base of a track — the note and scale that all the other notes resolve around. It determines the emotional flavour more than almost any other decision in production.
+    </p>
+    <p>
+      There are two types of keys: <strong>major</strong> and <strong>minor</strong>. Major keys sound bright, open, and uplifting — think of a pop anthem or a feel-good summer record. Minor keys sound darker, more emotional, and introspective — most Hip-Hop, R&amp;B, and Trap works in minor keys. The same melody transposed from major to minor feels like a completely different song.
+    </p>
+    <p>
+      There are 12 possible root notes (C, C#, D, D#, E, F, F#, G, G#, A, A#, B), and each can be major or minor — giving 24 possible keys in total. The Camelot Wheel maps all of them.
+    </p>
+
+    <h2>The Camelot Wheel — What It Is and How to Read It</h2>
+
+    <p>
+      The Camelot Wheel was created by Mark Davis as a simple system for DJs to mix tracks harmonically. It assigns every key a number (1–12) and a letter (<strong>A</strong> for minor, <strong>B</strong> for major). Instead of thinking in music theory, you think in numbers: tracks with the same number or adjacent numbers will mix harmonically without clashing.
+    </p>
+
+    <div class="callout">
+      <strong>The rule you need to know</strong>
+      Keys that share the same number (e.g., 8A and 8B) are relative major/minor — they share all the same notes. Keys with adjacent numbers (e.g., 8B and 9B) move smoothly in one direction around the wheel. Either combination mixes without clashing. That's it.
+    </div>
+
+    <div class="camelot-grid">
+      <div class="cg-header">No.</div>
+      <div class="cg-header"><span class="cam-badge cam-badge--a">A</span> Minor key</div>
+      <div class="cg-header"><span class="cam-badge cam-badge--b">B</span> Major key</div>
+
+      <div class="cg-num">1</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">1A</span>G♯ / A♭ minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">1B</span>B major</div>
+
+      <div class="cg-num">2</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">2A</span>D♯ / E♭ minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">2B</span>F♯ / G♭ major</div>
+
+      <div class="cg-num">3</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">3A</span>A♯ / B♭ minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">3B</span>C♯ / D♭ major</div>
+
+      <div class="cg-num">4</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">4A</span>F minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">4B</span>G♯ / A♭ major</div>
+
+      <div class="cg-num">5</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">5A</span>C minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">5B</span>E♭ / D♯ major</div>
+
+      <div class="cg-num">6</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">6A</span>G minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">6B</span>B♭ / A♯ major</div>
+
+      <div class="cg-num">7</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">7A</span>D minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">7B</span>F major</div>
+
+      <div class="cg-num">8</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">8A</span>A minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">8B</span>C major</div>
+
+      <div class="cg-num">9</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">9A</span>E minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">9B</span>G major</div>
+
+      <div class="cg-num">10</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">10A</span>B minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">10B</span>D major</div>
+
+      <div class="cg-num">11</div>
+      <div class="cg-cell cg-minor"><span class="cam-badge cam-badge--a">11A</span>F♯ / G♭ minor</div>
+      <div class="cg-cell cg-major"><span class="cam-badge cam-badge--b">11B</span>A major</div>
+
+      <div class="cg-num cg-row-last">12</div>
+      <div class="cg-cell cg-minor cg-row-last"><span class="cam-badge cam-badge--a">12A</span>C♯ / D♭ minor</div>
+      <div class="cg-cell cg-major cg-row-last"><span class="cam-badge cam-badge--b">12B</span>E major</div>
+    </div>
+
+    <h2>Practical Uses — Where This Actually Saves You Time</h2>
+
+    <p>
+      <strong>Matching a vocal to a beat.</strong> If you recorded a vocal hook a cappella (or have a reference vocal in a known key), find its Camelot position and browse beats in the same number or adjacent positions. An A minor vocal (8A) pairs naturally with beats in 8A, 8B (C major), 7A (D minor), or 9A (E minor).
+    </p>
+    <p>
+      <strong>Layering two beats or loops.</strong> Stacking a chord loop on top of an existing beat — or layering two sample packs — only works cleanly if the keys are compatible. The Camelot system tells you in two seconds whether they'll work together or fight each other.
+    </p>
+    <p>
+      <strong>DJing or creating a DJ-style mix.</strong> Moving from one track to the next in the same or adjacent Camelot position ensures the transition sounds intentional and musical, not like a key clash.
+    </p>
+    <p>
+      <strong>Producing around a sample.</strong> When you flip a sample and build a beat around it, identify the sample's key first. Everything you add — drums are key-agnostic, but your 808, bassline, melodic layers — needs to live in the same or compatible key. The Camelot system keeps that organised.
+    </p>
+
+    <h2>Find BPM &amp; Key Instantly — No Ear Training Required</h2>
+
+    <p>
+      You don't need to figure out BPM or key by ear. The <a href="../bpm-key-finder.html">BPM &amp; Key Finder</a> tool on this site analyses any audio file directly in your browser — no upload, no account — and gives you the tempo, the detected key, its Camelot position, and a list of harmonically compatible adjacent keys. Drop an audio file and the results are back in a few seconds.
+    </p>
+    <p>
+      Use it before a session to check any beat or sample you're working with. The Camelot output directly maps to the reference table above — so you know instantly which other keys and beats will work alongside it.
+    </p>
+
+  </article>
+
+  <div class="post-share">
+    <p class="post-share-label">// Share this post</p>
+    <button class="share-trigger" id="share-trigger">Share Article →</button>
+  </div>
+
+  <footer class="post-footer">
+    <a href="../blog.html" class="post-footer-back">← Back to all posts</a>
+    <a href="../beatstore.html" class="post-footer-cta">Browse Beats →</a>
+  </footer>
+
+</main>
+
+<div class="share-overlay" id="share-overlay"></div>
+<div class="share-modal" id="share-modal" role="dialog" aria-modal="true" aria-label="Share this article">
+  <div class="share-modal-handle"></div>
+  <button class="share-modal-close" id="share-modal-close" aria-label="Close">✕</button>
+  <p class="share-modal-title">// Share this article</p>
+  <div class="share-options">
+    <button class="share-option" id="share-x"><span class="share-option-icon">𝕏</span>X / Twitter</button>
+    <button class="share-option" id="share-whatsapp"><span class="share-option-icon">💬</span>WhatsApp</button>
+    <button class="share-option" id="share-instagram"><span class="share-option-icon">📸</span>Instagram Story</button>
+    <button class="share-option" id="share-copy"><span class="share-option-icon">🔗</span>Copy Link</button>
+  </div>
+  <p class="share-ig-note" id="share-ig-note"></p>
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../../js/site.js"></script>
+<script src="../../js/cookies.js"></script>
+<script src="../../js/main.js"></script>
+<script>
+(function () {
+  var url   = encodeURIComponent(window.location.href);
+  var title = encodeURIComponent(document.title);
+  var text  = encodeURIComponent('Check this out: ' + document.title + ' — ' + window.location.href);
+  var trigger  = document.getElementById('share-trigger');
+  var overlay  = document.getElementById('share-overlay');
+  var modal    = document.getElementById('share-modal');
+  var closeBtn = document.getElementById('share-modal-close');
+  var igNote   = document.getElementById('share-ig-note');
+  function openModal() {
+    overlay.classList.add('open'); modal.style.display = 'block';
+    requestAnimationFrame(function () { requestAnimationFrame(function () { modal.classList.add('open'); }); });
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('open'); overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(function () { modal.style.display = ''; }, 300);
+    igNote.textContent = '';
+  }
+  trigger.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+  document.getElementById('share-x').addEventListener('click', function () {
+    window.open('https://twitter.com/intent/tweet?url=' + url + '&text=' + title, '_blank', 'noopener,width=600,height=400');
+  });
+  document.getElementById('share-whatsapp').addEventListener('click', function () {
+    window.open('https://api.whatsapp.com/send?text=' + text, '_blank', 'noopener');
+  });
+  document.getElementById('share-instagram').addEventListener('click', function () {
+    if (navigator.share) {
+      navigator.share({ title: document.title, url: window.location.href }).then(function () { closeModal(); }).catch(function () {});
+    } else {
+      navigator.clipboard.writeText(window.location.href).then(function () {
+        igNote.textContent = 'Link copied! Open Instagram on your phone → Stories → link sticker → paste.';
+      });
+    }
+  });
+  document.getElementById('share-copy').addEventListener('click', function () {
+    var btn = document.getElementById('share-copy');
+    navigator.clipboard.writeText(window.location.href).then(function () {
+      btn.classList.add('copied'); btn.querySelector('.share-option-icon').textContent = '✓';
+      setTimeout(function () { btn.classList.remove('copied'); btn.querySelector('.share-option-icon').textContent = '🔗'; }, 2000);
+    });
+  });
+})();
+</script>
+</body>
+</html>

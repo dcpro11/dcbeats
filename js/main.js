@@ -45,6 +45,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  /* ── "More" dropdown ──────────────────────────────────── */
+  const moreItem = document.querySelector('.nav-more');
+  const moreBtn  = document.querySelector('.nav-more-btn');
+
+  if (moreItem && moreBtn) {
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = moreItem.classList.toggle('open');
+      moreBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    document.addEventListener('click', () => {
+      moreItem.classList.remove('open');
+      moreBtn.setAttribute('aria-expanded', 'false');
+    });
+
+    moreItem.querySelector('.nav-more-menu').addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
 
   /* ══════════════════════════════════════════════════════════
      3. SCROLL REVEAL — IntersectionObserver
@@ -250,6 +271,33 @@ document.querySelectorAll('.license-card').forEach(card => {
   // Watch for attribute changes (e.g. toggled via JS at runtime)
   const mo = new MutationObserver(syncPromo);
   mo.observe(banner, { attributes: true, attributeFilter: ['data-active'] });
+})();
+
+
+/* ══════════════════════════════════════════════════════════
+   MAINTENANCE NOTICE — body class sync
+   Same pattern as the promo banner above. The element itself
+   is injected at runtime by js/remote-config.js (admin-managed,
+   non-blocking notice — site stays fully usable while shown).
+══════════════════════════════════════════════════════════ */
+(function () {
+  function watch() {
+    const notice = document.getElementById('maintenance-notice');
+    if (!notice) {
+      // remote-config.js injects this after DOMContentLoaded — retry shortly
+      return setTimeout(watch, 300);
+    }
+
+    function syncNotice() {
+      const active = notice.getAttribute('data-active') === 'true';
+      document.body.classList.toggle('maintenance-active', active);
+    }
+
+    syncNotice();
+    const mo = new MutationObserver(syncNotice);
+    mo.observe(notice, { attributes: true, attributeFilter: ['data-active'] });
+  }
+  watch();
 })();
 
 

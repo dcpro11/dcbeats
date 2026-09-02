@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Get 10 Free Beats — DC Beats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c8a96e;
+      --gold-bright: #e2c07a;
+      --gold-dim: #8a6e3e;
+      --bg: #0a0a0b;
+      --bg-2: #111113;
+      --bg-3: #18181c;
+      --text: #f0ece4;
+      --text-muted: #7a7268;
+      --border: rgba(200, 169, 110, 0.15);
+      --border-hover: rgba(200, 169, 110, 0.4);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+      top: -150px; left: 50%;
+      transform: translateX(-50%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+    .glow-orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(200,169,110,0.05) 0%, transparent 70%);
+      bottom: 0; right: -100px;
+      animation: pulse2 10s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+      50%       { opacity: 1;   transform: translateX(-50%) scale(1.1); }
+    }
+    @keyframes pulse2 {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50%       { opacity: 0.9; transform: scale(1.15); }
+    }
+
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 28px 24px 48px;
+    }
+
+    /* Constrains the back-link, logo and card to one shared column,
+       so the back-link lines up with the card's left edge instead
+       of sitting centered relative to the whole viewport */
+    .content-col {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* ── Back to site ── */
+    .back-link {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 28px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.25s ease, transform 0.25s ease;
+      animation: fadeDown 0.8s ease both;
+    }
+    .back-link:hover { color: var(--gold); transform: translateX(-2px); }
+    .back-link svg { width: 13px; height: 13px; transition: transform 0.25s ease; }
+    .back-link:hover svg { transform: translateX(-2px); }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 52px 44px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.9s ease 0.1s both;
+    }
+    @media (max-width: 600px) { .card { padding: 36px 24px; } }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 60px; height: 60px;
+      border-right: 1px solid var(--border-hover);
+      border-bottom: 1px solid var(--border-hover);
+    }
+    .corner-tl {
+      position: absolute;
+      top: 0; left: 0;
+      width: 60px; height: 60px;
+      border-left: 1px solid var(--border-hover);
+      border-top: 1px solid var(--border-hover);
+    }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(200,169,110,0.08);
+      border: 1px solid var(--border-hover);
+      padding: 6px 14px;
+      border-radius: 2px;
+      margin-bottom: 28px;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+    .badge-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ── Headline ── */
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.6rem, 4.4vw, 2.3rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold), var(--gold-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+
+    /* ── Perks ── */
+    .perks {
+      list-style: none;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .perks li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: #a09890;
+    }
+    .perks li::before {
+      content: '';
+      width: 16px; height: 16px;
+      min-width: 16px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-dim);
+      background: rgba(200,169,110,0.07)
+        url("data:image/svg+xml,%3Csvg width='8' height='6' viewBox='0 0 8 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3l2 2 4-4' stroke='%23c8a96e' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        no-repeat center;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 32px;
+    }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 14px; }
+    label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    input {
+      width: 100%;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    input::placeholder { color: #3a3830; }
+    input:focus { border-color: var(--gold-dim); background: #14141a; }
+    input.error { border-color: #c0442a; }
+
+    .error-msg {
+      font-size: 12px;
+      color: #c0442a;
+      margin-top: 5px;
+      display: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ── Submit ── */
+    .btn-submit {
+      width: 100%;
+      margin-top: 8px;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 50%, #a07840 100%);
+      border: none;
+      border-radius: 2px;
+      color: #0a0a0b;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover   { opacity: 0.92; transform: translateY(-1px); }
+    .btn-submit:active  { transform: translateY(0); opacity: 1; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-submit .btn-shimmer {
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shimmer 3s ease infinite;
+    }
+    @keyframes shimmer {
+      0%   { left: -60%; }
+      100% { left: 130%; }
+    }
+
+    .btn-loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(10,10,11,0.3);
+      border-top-color: #0a0a0b;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .privacy-note {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 11px;
+      color: #3d3830;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+    .privacy-note a { color: var(--gold-dim); text-decoration: none; }
+
+    /* ── Success ── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+      animation: fadeUp 0.6s ease both;
+    }
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-dim);
+      background: rgba(200,169,110,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .success-icon svg { width: 28px; height: 28px; }
+    .success-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--gold);
+    }
+    .success-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── Footer ── */
+    .footer-note {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #2e2c28;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.1em;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+    .footer-note a { color: var(--gold-dim); text-decoration: none; opacity: 0.7; }
+    .footer-note a:hover { opacity: 1; }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+
+<div class="wrapper">
+
+  <div class="content-col">
+
+    <a href="https://dcbeats.net" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to site
+    </a>
+
+  <div class="card" id="mainCard">
+    <div class="corner-tl"></div>
+
+    <div class="badge">
+      <span class="badge-dot"></span>
+      <span class="badge-text">Free Download</span>
+    </div>
+
+    <h1>10 Free Beats.<br><em>No Strings.</em></h1>
+
+    <p class="subtitle">
+      Drop your name and email — I'll send you a curated pack of 10 premium beats, straight to your inbox. No credit card. No catch.
+    </p>
+
+    <ul class="perks">
+      <li>10 high-quality beats — pop, trap &amp; guitar vibes</li>
+      <li>Instant delivery to your inbox</li>
+      <li>Free to use for demos &amp; reference tracks</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div id="formContainer">
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" placeholder="Artist name or real name" autocomplete="given-name" />
+        <span class="error-msg" id="nameError">Please enter your name.</span>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@email.com" autocomplete="email" />
+        <span class="error-msg" id="emailError">Please enter a valid email.</span>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+        <span class="btn-shimmer"></span>
+        <span id="btnLabel">Send Me the Beats →</span>
+        <span class="btn-loading" id="btnLoading">
+          <span class="spinner"></span> Sending…
+        </span>
+      </button>
+
+      <p class="privacy-note">No spam. Unsubscribe anytime. &nbsp;·&nbsp; <a href="privacy-policy.html">Privacy Policy</a></p>
+    </div>
+
+    <div class="success-state" id="successState">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="success-title">You're in. 🎧</div>
+      <p class="success-text">
+        Check your inbox — your 10 free beats are on their way.<br>
+        <span style="color:#4a4540;">Didn't receive it? Check spam or <a href="mailto:info@dcbeats.net" style="color:var(--gold-dim)">reach out.</a></span>
+      </p>
+    </div>
+  </div>
+
+  </div>
+
+  <p class="footer-note">
+    &copy; <span id="year"></span> <a href="https://dcbeats.net">dcbeats.net</a> &nbsp;·&nbsp; Made in Portugal 🇵🇹
+  </p>
+
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ── Particles ── */
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', () => { resize(); init(); });
+  resize();
+
+  function init() {
+    particles = Array.from({ length: 50 }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.2,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: -Math.random() * 0.3 - 0.05,
+      alpha: Math.random() * 0.5 + 0.1
+    }));
+  }
+  init();
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,169,110,${p.alpha})`; ctx.fill();
+      p.x += p.vx; p.y += p.vy;
+      if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; }
+      if (p.x < -4) p.x = W + 4;
+      if (p.x > W + 4) p.x = -4;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  /* ── Form ── */
+  function validate() {
+    const name  = document.getElementById('name');
+    const email = document.getElementById('email');
+    const nameErr  = document.getElementById('nameError');
+    const emailErr = document.getElementById('emailError');
+    let valid = true;
+
+    if (!name.value.trim()) {
+      name.classList.add('error'); nameErr.classList.add('visible'); valid = false;
+    } else {
+      name.classList.remove('error'); nameErr.classList.remove('visible');
+    }
+
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email.value.trim())) {
+      email.classList.add('error'); emailErr.classList.add('visible'); valid = false;
+    } else {
+      email.classList.remove('error'); emailErr.classList.remove('visible');
+    }
+
+    return valid;
+  }
+
+  async function handleSubmit() {
+    if (!validate()) return;
+
+    const btn     = document.getElementById('submitBtn');
+    const label   = document.getElementById('btnLabel');
+    const loading = document.getElementById('btnLoading');
+
+    btn.disabled = true;
+    label.style.display   = 'none';
+    loading.style.display = 'flex';
+
+    const name  = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    // ── Replace with your MailerLite API endpoint ──
+    const WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE';
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, source: 'free-beats-landing' })
+      });
+    } catch (e) {
+      console.warn('Webhook error:', e);
+    }
+
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('successState').style.display  = 'block';
+
+    btn.disabled = false;
+    label.style.display   = 'inline';
+    loading.style.display = 'none';
+  }
+
+  ['name', 'email'].forEach(id => {
+    document.getElementById(id).addEventListener('input', function () {
+      this.classList.remove('error');
+      document.getElementById(id + 'Error').classList.remove('visible');
+    });
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') handleSubmit(); });
+</script>
+</body>
+</html>

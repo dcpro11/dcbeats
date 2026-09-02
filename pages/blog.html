@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — DC Beats</title>
+  <meta name="description" content="Production tips, licensing guides and music industry knowledge from DC Beats. Useful reads for artists, producers and creators." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dcbeats.net/pages/blog.html" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://dcbeats.net/pages/blog.html" />
+  <meta property="og:title"       content="Blog — DC Beats" />
+  <meta property="og:description" content="Production tips, licensing guides and music industry knowledge from DC Beats." />
+  <meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Blog — DC Beats" />
+  <meta name="twitter:description" content="Production tips, licensing guides and music industry knowledge." />
+  <meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/cookies.css" />
+  <link rel="stylesheet" href="../css/blog.css" />
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<!-- HERO -->
+<section class="blog-hero">
+  <div class="container">
+    <div class="section-label">
+      <span class="label">Blog</span>
+    </div>
+    <h1>Production <span>Insights</span>.</h1>
+    <p class="blog-hero-sub">Tips, licensing breakdowns and music knowledge — written for artists and producers.</p>
+  </div>
+</section>
+
+<!-- POST GRID -->
+<section class="blog-content">
+  <div class="container">
+    <div class="blog-grid"  id="blog-grid"></div>
+    <div class="blog-empty" id="blog-empty" style="display:none">
+      <p>// no posts yet — check back soon</p>
+    </div>
+  </div>
+</section>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/blog-posts.js"></script>
+<script>
+(function () {
+  var grid  = document.getElementById('blog-grid');
+  var empty = document.getElementById('blog-empty');
+
+  if (!window.BLOG_POSTS || !BLOG_POSTS.length) {
+    empty.style.display = 'block';
+    return;
+  }
+
+  var months = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+
+  function formatDate(iso) {
+    var d = new Date(iso);
+    return months[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear();
+  }
+
+  grid.innerHTML = BLOG_POSTS.map(function (post) {
+    var tags = (post.tags || []).map(function (t) {
+      return '<span class="blog-tag">' + t + '</span>';
+    }).join('');
+
+    var meta = '<span class="blog-card-date">' + formatDate(post.date) + '</span>';
+    if (post.readTime) {
+      meta += '<span class="blog-card-sep">·</span><span class="blog-card-read">' + post.readTime + ' min read</span>';
+    }
+
+    return [
+      '<article class="blog-card">',
+        '<a href="blog/' + post.slug + '.html" class="blog-card-link">',
+          '<div class="blog-card-body">',
+            '<div class="blog-card-tags">' + tags + '</div>',
+            '<h2 class="blog-card-title">' + post.title + '</h2>',
+            '<p class="blog-card-excerpt">' + post.excerpt + '</p>',
+            '<div class="blog-card-meta">' + meta + '</div>',
+            '<span class="blog-card-cta">Read article →</span>',
+          '</div>',
+        '</a>',
+      '</article>',
+    ].join('');
+  }).join('');
+})();
+</script>
+</body>
+</html>

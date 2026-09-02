@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loudness Analyzer — DC Beats</title>
+<meta name="description" content="Free LUFS loudness analyzer. Measure integrated LUFS, True Peak, LU Range and compare against Spotify, YouTube and Apple Music targets. Runs in your browser." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://dcbeats.net/pages/loudness-analyzer.html" />
+<meta property="og:type"        content="website" />
+<meta property="og:url"         content="https://dcbeats.net/pages/loudness-analyzer.html" />
+<meta property="og:title"       content="Loudness Analyzer — DC Beats" />
+<meta property="og:description" content="Free LUFS analyzer — check integrated loudness, True Peak, and platform targets. Audio stays on your device." />
+<meta property="og:image"       content="https://dcbeats.net/assets/og-image.jpg" />
+<meta name="twitter:card"       content="summary_large_image" />
+<meta name="twitter:title"      content="Loudness Analyzer — DC Beats" />
+<meta name="twitter:description" content="Free browser-based LUFS loudness analyzer with platform target comparison." />
+<meta name="twitter:image"      content="https://dcbeats.net/assets/og-image.jpg" />
+<meta name="theme-color" content="#0a0a0b" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css" />
+<link rel="stylesheet" href="../css/cookies.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Force nav visible — no hero on this page, so don't wait for scroll */
+  #nav {
+    background: rgba(10, 10, 10, 0.96) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  }
+  #nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: -1;
+  }
+
+  :root {
+    --gold: #c8a96e;
+    --gold-bright: #e0c07a;
+    --bg: #0a0a0b;
+    --surface: #111113;
+    --surface2: #1a1a1e;
+    --border: rgba(200,169,110,0.15);
+    --text: #e8e4da;
+    --muted: #6b6560;
+    --green: #4caf7d;
+    --yellow: #e0b84a;
+    --red: #e05a4a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .tool-wrap { width: 100%; max-width: 1100px; margin: 0 auto; padding: 96px 2rem 5rem; }
+
+  .tool-wrap header { text-align: center; margin-bottom: 3rem; }
+
+  .tool-ui-inner { max-width: 700px; margin: 0 auto; }
+
+  .breadcrumb { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.75rem; }
+  .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb .sep { margin: 0 0.5em; opacity: 0.35; }
+
+  .tool-info { margin-top: 4rem; }
+  .tool-info-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin-bottom: 3.5rem; }
+  .tool-info-label-hdr { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+  .info-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+  @media (max-width: 640px) { .info-steps { grid-template-columns: 1fr; } }
+  .info-step { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .info-step-num { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--gold); opacity: 0.55; min-width: 2rem; padding-top: 3px; }
+  .info-step strong { font-size: 0.88rem; color: var(--text); display: block; margin-bottom: 0.3rem; }
+  .info-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; margin: 0; }
+  .info-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+  @media (max-width: 800px) { .info-cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .info-cards { grid-template-columns: 1fr; } }
+  .info-card { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 1.25rem 1.5rem; }
+  .info-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; margin-top: 0.75rem; }
+  .info-card p + p { margin-top: 0.5rem; }
+  .info-card strong { color: var(--text); }
+  .info-cta-box { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .info-cta-box p { font-size: 0.83rem; color: var(--muted); margin: 0; line-height: 1.6; }
+  .info-cta-box a.inline { color: var(--gold); text-decoration: none; }
+  .info-cta-box a.inline:hover { text-decoration: underline; }
+  .info-cta-btn { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.1rem; border: 1px solid rgba(200,169,110,0.4); color: var(--gold); text-decoration: none; border-radius: 2px; transition: border-color 0.2s, background 0.2s; white-space: nowrap; }
+  .info-cta-btn:hover { border-color: var(--gold); background: rgba(200,169,110,0.07); }
+
+  .brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 0.75rem; opacity: 0.8;
+  }
+
+  .tool-wrap h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .tool-wrap h1 span { color: var(--gold); }
+
+  .subtitle {
+    margin-top: 0.75rem; font-size: 0.8rem; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em;
+  }
+
+  /* Drop Zone */
+  .drop-zone {
+    border: 1px solid var(--border); border-radius: 2px;
+    padding: 3rem 2rem; text-align: center;
+    background: var(--surface); cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .drop-zone::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(200,169,110,0.03) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .drop-zone.drag-over { border-color: var(--gold); background: rgba(200,169,110,0.05); }
+  .drop-icon {
+    width: 52px; height: 52px; margin: 0 auto 1.25rem;
+    border: 1px solid var(--border); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .drop-zone.drag-over .drop-icon { border-color: var(--gold); transform: scale(1.05); }
+  .drop-icon svg { width: 20px; height: 20px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .drop-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .drop-hint { font-size: 0.75rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+  .drop-hint span { color: var(--gold); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(200,169,110,0.3); }
+  #fileInput { display: none; }
+
+  /* Progress */
+  .progress-wrap { display: none; margin-top: 1.5rem; flex-direction: column; gap: 0.5rem; }
+  .progress-wrap.visible { display: flex; }
+  .progress-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; color: var(--gold); text-transform: uppercase; display: flex; justify-content: space-between; }
+  .progress-bar { height: 2px; background: var(--surface2); border-radius: 1px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.4s ease; border-radius: 1px; }
+
+  /* Error */
+  .error-msg { display: none; text-align: center; padding: 1rem; background: rgba(180,60,60,0.07); border: 1px solid rgba(180,60,60,0.2); border-radius: 2px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #c47; margin-top: 1rem; letter-spacing: 0.05em; }
+  .error-msg.visible { display: block; }
+
+  /* Results */
+  .results { display: none; margin-top: 1.5rem; gap: 1rem; flex-direction: column; }
+  .results.visible { display: flex; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* File info */
+  .file-info {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 2px; padding: 0.75rem 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    animation: fadeUp 0.3s ease forwards; opacity: 0;
+  }
+  .file-info-icon { width: 28px; height: 28px; border: 1px solid rgba(200,169,110,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .file-info-icon svg { width: 12px; height: 12px; stroke: var(--gold); fill: none; stroke-width: 2; }
+  .file-name { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted); white-space: nowrap; }
+
+  /* Main metrics grid */
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+    animation: fadeUp 0.4s ease 0.05s forwards; opacity: 0;
+  }
+
+  .metric-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 2px; padding: 1.25rem 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  .metric-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.25;
+  }
+  .metric-card.wide { grid-column: 1 / -1; }
+
+  .metric-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+
+  .metric-value { font-size: 2.2rem; font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+  .metric-unit { font-size: 0.85rem; font-weight: 400; color: var(--muted); margin-left: 0.15rem; }
+
+  .metric-value.ok   { color: var(--green); }
+  .metric-value.warn { color: var(--yellow); }
+  .metric-value.bad  { color: var(--red); }
+  .metric-value.neutral { color: var(--gold-bright); }
+
+  .metric-sub { margin-top: 0.35rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+
+  /* Platform targets */
+  .platforms {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 2px; padding: 1.25rem 1.5rem;
+    animation: fadeUp 0.4s ease 0.1s forwards; opacity: 0;
+  }
+  .platforms-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+  .platform-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .platform-row { display: grid; grid-template-columns: 110px 1fr 60px; align-items: center; gap: 0.75rem; }
+  .platform-name { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text); }
+  .platform-bar-wrap { height: 4px; background: var(--surface2); border-radius: 2px; position: relative; overflow: visible; }
+  .platform-bar { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+  .platform-target-line {
+    position: absolute; top: -4px; bottom: -4px; width: 2px;
+    background: var(--border); border-radius: 1px;
+  }
+  .platform-status { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; text-align: right; white-space: nowrap; }
+  .platform-status.ok   { color: var(--green); }
+  .platform-status.warn { color: var(--yellow); }
+  .platform-status.loud { color: var(--red); }
+
+  /* Short-term chart */
+  .chart-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 2px; padding: 1.25rem 1.5rem;
+    animation: fadeUp 0.4s ease 0.15s forwards; opacity: 0;
+  }
+  .chart-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+  .chart-legend { display: flex; gap: 1rem; }
+  .chart-legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.6rem; color: var(--muted); }
+  .legend-dot { width: 6px; height: 2px; border-radius: 1px; }
+  #loudnessChart { width: 100%; height: 120px; display: block; }
+
+  /* Reset */
+  .reset-btn {
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.6rem 1.2rem; cursor: pointer; border-radius: 1px;
+    transition: border-color 0.2s, color 0.2s; display: block; margin: 0 auto;
+    animation: fadeUp 0.4s ease 0.2s forwards; opacity: 0;
+  }
+  .reset-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+
+  @media (max-width: 500px) {
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .platform-row { grid-template-columns: 80px 1fr 50px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav" role="navigation" aria-label="Main navigation"></nav>
+
+<div class="tool-wrap">
+  <header>
+    <p class="breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><a href="tools.html">Tools</a><span class="sep">/</span>Loudness Analyzer</p>
+    <p class="brand">DC Beats · Tools</p>
+    <h1>Loudness <span>Analyzer</span></h1>
+    <p class="subtitle">// LUFS · True Peak · LU Range · platform targets</p>
+  </header>
+
+  <div class="tool-ui-inner">
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept="audio/*">
+    <div class="drop-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+    </div>
+    <p class="drop-title">Drop your audio file here</p>
+    <p class="drop-hint">MP3 · WAV · FLAC · OGG &nbsp;|&nbsp; or <span id="browseBtn">browse files</span></p>
+  </div>
+
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">
+      <span id="progressStatus">Analyzing...</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="results" id="results">
+
+    <div class="file-info">
+      <div class="file-info-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <span class="file-name" id="fileName">—</span>
+      <span class="file-meta" id="fileMeta">—</span>
+    </div>
+
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <p class="metric-label">// integrated LUFS</p>
+        <div class="metric-value neutral" id="intLufs">—<span class="metric-unit">LUFS</span></div>
+        <p class="metric-sub">overall loudness</p>
+      </div>
+      <div class="metric-card">
+        <p class="metric-label">// true peak</p>
+        <div class="metric-value neutral" id="truePeak">—<span class="metric-unit">dBTP</span></div>
+        <p class="metric-sub" id="truePeakSub">—</p>
+      </div>
+      <div class="metric-card">
+        <p class="metric-label">// momentary max</p>
+        <div class="metric-value neutral" id="momentaryMax">—<span class="metric-unit">LUFS</span></div>
+        <p class="metric-sub">peak 400ms window</p>
+      </div>
+      <div class="metric-card">
+        <p class="metric-label">// LU range</p>
+        <div class="metric-value neutral" id="luRange">—<span class="metric-unit">LU</span></div>
+        <p class="metric-sub" id="luRangeSub">—</p>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-label">
+        <span>// short-term loudness over time</span>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="legend-dot" style="background:var(--gold)"></div>short-term</div>
+          <div class="chart-legend-item"><div class="legend-dot" style="background:var(--muted)"></div>integrated</div>
+        </div>
+      </div>
+      <canvas id="loudnessChart"></canvas>
+    </div>
+
+    <div class="platforms">
+      <p class="platforms-label">// platform targets (integrated LUFS)</p>
+      <div class="platform-list" id="platformList"></div>
+    </div>
+
+    <button class="reset-btn" id="resetBtn">&#8635; analyze another file</button>
+  </div>
+
+  </div><!-- /.tool-ui-inner -->
+
+  <div class="tool-info">
+    <div class="tool-info-divider"></div>
+
+    <p class="tool-info-label-hdr">// how to use</p>
+    <div class="info-steps">
+      <div class="info-step">
+        <span class="info-step-num">01</span>
+        <div>
+          <strong>Drop or select your file</strong>
+          <p>Drop any MP3, WAV, FLAC or OGG onto the zone above, or click "browse files". Analysis runs entirely in your browser — your audio never leaves your device.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <span class="info-step-num">02</span>
+        <div>
+          <strong>Analysis completes in seconds</strong>
+          <p>The tool applies K-weighting filters (per ITU-R BS.1770-4), calculates gated integrated LUFS, True Peak via 4x oversampling, short-term loudness and LU range.</p>
+        </div>
+      </div>
+      <div class="info-step">
+        <span class="info-step-num">03</span>
+        <div>
+          <strong>Compare against platform targets</strong>
+          <p>See how your track compares to Spotify, YouTube, Apple Music, SoundCloud, Tidal and Amazon Music normalisation targets — with colour-coded pass/warn/fail status.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-cards">
+      <div class="info-card">
+        <p class="tool-info-label-hdr">// what is LUFS?</p>
+        <p>LUFS (Loudness Units Full Scale) is the standard loudness measurement for broadcast and streaming, defined in EBU R 128 / ITU-R BS.1770. Unlike dB peak, LUFS reflects how loud a track actually sounds to human hearing.</p>
+        <p><strong>Integrated LUFS</strong> is the average loudness across the whole track (with gating to ignore silence). Most streaming platforms normalise to around <strong>−14 LUFS</strong>.</p>
+      </div>
+      <div class="info-card">
+        <p class="tool-info-label-hdr">// True Peak vs Integrated</p>
+        <p><strong>Integrated LUFS</strong> measures perceived loudness — how full and loud the track sounds overall. Target: −14 to −16 LUFS for most platforms.</p>
+        <p><strong>True Peak</strong> measures the absolute highest sample value including inter-sample peaks that occur during D/A conversion. Keep True Peak below <strong>−1.0 dBTP</strong> to avoid clipping on streaming encoders.</p>
+      </div>
+      <div class="info-card">
+        <p class="tool-info-label-hdr">// platform normalisation</p>
+        <p>Every major streaming platform normalises loudness on playback. If your track is louder than their target, they turn it down — you lose no quality. If it's quieter, some platforms turn it up (risking noise floor artefacts).</p>
+        <p>Mastering to <strong>−14 LUFS</strong> with True Peak below <strong>−1 dBTP</strong> is the safe target for Spotify, YouTube and SoundCloud.</p>
+      </div>
+      <div class="info-card">
+        <p class="tool-info-label-hdr">// mastering tips</p>
+        <p>If your Integrated LUFS reads above −9 or below −18, the mix likely has dynamic or limiting issues. Aim for −14 to −16 LUFS integrated with LU Range between 6–12 LU for a well-balanced master.</p>
+        <p>Need a professional master? <a href="mixing-mastering.html" class="inline" style="color:var(--gold);text-decoration:none;">DC Beats Mixing &amp; Mastering</a> delivers radio-ready results.</p>
+      </div>
+    </div>
+
+    <div class="info-cta-box">
+      <p>Find the BPM and musical key of any audio file — browser-based, no upload, instant results. Use the <a href="bpm-key-finder.html" class="inline">BPM &amp; Key Finder</a> for free.</p>
+      <a href="bpm-key-finder.html" class="info-cta-btn">BPM &amp; Key Finder →</a>
+    </div>
+  </div>
+</div>
+
+<footer id="footer"></footer>
+
+<script src="../js/site.js"></script>
+<script src="../js/cookies.js"></script>
+<script src="../js/remote-config.js"></script>
+<script src="../js/main.js"></script>
+<script>
+// ─── Platform targets (LUFS) ──────────────────────────────────────
+const PLATFORMS = [
+  { name: 'Spotify',      target: -14, tolerance: 1 },
+  { name: 'YouTube',      target: -14, tolerance: 1 },
+  { name: 'Apple Music',  target: -16, tolerance: 1 },
+  { name: 'SoundCloud',   target: -14, tolerance: 1 },
+  { name: 'Tidal',        target: -14, tolerance: 1 },
+  { name: 'Amazon Music', target: -14, tolerance: 1 },
+];
+
+// ─── ITU-R BS.1770-4 Loudness implementation ──────────────────────
+// K-weighting filter coefficients for 44100 Hz
+// Stage 1: pre-filter (high-shelf)
+// Stage 2: RLB weighting (high-pass)
+function makeKWeightingFilters(sampleRate) {
+  // Pre-filter (high-shelf boost) coefficients — computed for given sample rate
+  const f0 = 1681.974450955533, G = 3.999843853973347, Q = 0.7071752369554196;
+  const K  = Math.tan(Math.PI * f0 / sampleRate);
+  const Vh = Math.pow(10, G / 20);
+  const Vb = Math.pow(Vh, 0.4996667741545416);
+  const a0 = 1 + K / Q + K * K;
+  const preB = [
+    (Vh + Vb * K / Q + K * K) / a0,
+    2 * (K * K - Vh) / a0,
+    (Vh - Vb * K / Q + K * K) / a0
+  ];
+  const preA = [1, 2 * (K * K - 1) / a0, (1 - K / Q + K * K) / a0];
+
+  // RLB filter (high-pass, 2nd order Butterworth ~38Hz)
+  const f1 = 38.13547087602444, Q1 = 0.5003270373238773;
+  const K1 = Math.tan(Math.PI * f1 / sampleRate);
+  const a01 = 1 + K1 / Q1 + K1 * K1;
+  const rlbB = [1, -2, 1].map(v => v / a01);
+  const rlbA = [1, 2 * (K1 * K1 - 1) / a01, (1 - K1 / Q1 + K1 * K1) / a01];
+
+  return { preB, preA, rlbB, rlbA };
+}
+
+function applyBiquad(signal, b, a) {
+  const out = new Float32Array(signal.length);
+  let x1=0, x2=0, y1=0, y2=0;
+  for (let i=0; i<signal.length; i++) {
+    const x0 = signal[i];
+    const y0 = b[0]*x0 + b[1]*x1 + b[2]*x2 - a[1]*y1 - a[2]*y2;
+    out[i] = y0;
+    x2=x1; x1=x0; y2=y1; y1=y0;
+  }
+  return out;
+}
+
+function kWeight(signal, sampleRate) {
+  const { preB, preA, rlbB, rlbA } = makeKWeightingFilters(sampleRate);
+  const stage1 = applyBiquad(signal, preB, preA);
+  return applyBiquad(stage1, rlbB, rlbA);
+}
+
+function meanSquare(arr, start, len) {
+  let sum = 0;
+  const end = Math.min(start + len, arr.length);
+  for (let i = start; i < end; i++) sum += arr[i] * arr[i];
+  return sum / (end - start);
+}
+
+// Compute loudness (EBU R 128 / ITU-R BS.1770-4)
+function analyzeLoudness(audioBuffer) {
+  const sr = audioBuffer.sampleRate;
+  const nCh = Math.min(audioBuffer.numberOfChannels, 2);
+
+  // K-weight each channel
+  const weighted = [];
+  for (let c = 0; c < nCh; c++) {
+    weighted.push(kWeight(audioBuffer.getChannelData(c), sr));
+  }
+
+  // Gating block size: 400ms momentary, 3s short-term
+  const momentaryLen = Math.round(0.4 * sr);   // 400ms
+  const shortTermLen = Math.round(3.0 * sr);   // 3s
+  const hopM = Math.round(0.1 * sr);           // 100ms hop (75% overlap for momentary)
+  const hopST = Math.round(0.1 * sr);          // 100ms hop for short-term
+
+  const totalSamples = weighted[0].length;
+
+  // Mean square per channel sum (power sum)
+  function blockPower(start, len) {
+    let p = 0;
+    for (let c = 0; c < nCh; c++) p += meanSquare(weighted[c], start, len);
+    // Stereo: average; mono: use as is
+    return nCh === 2 ? p : p;
+  }
+
+  // ── Momentary (400ms, hop 100ms) ─────────────────────────────
+  const momentaryBlocks = [];
+  for (let s = 0; s + momentaryLen <= totalSamples; s += hopM) {
+    const p = blockPower(s, momentaryLen);
+    momentaryBlocks.push(p > 0 ? -0.691 + 10 * Math.log10(p) : -Infinity);
+  }
+  const momentaryMax = momentaryBlocks.reduce((m, v) => Math.max(m, v), -Infinity);
+
+  // ── Short-term (3s, hop 100ms) ───────────────────────────────
+  const shortTermBlocks = [];
+  for (let s = 0; s + shortTermLen <= totalSamples; s += hopST) {
+    const p = blockPower(s, shortTermLen);
+    shortTermBlocks.push(p > 0 ? -0.691 + 10 * Math.log10(p) : -Infinity);
+  }
+
+  // ── Integrated (gated, per EBU R 128) ────────────────────────
+  // Absolute gate: -70 LUFS threshold
+  const absGate = -70;
+  const ungated = momentaryBlocks.filter(v => v > absGate);
+  let integrated = -Infinity;
+  if (ungated.length > 0) {
+    const avgP_ungated = ungated.reduce((s, v) => s + Math.pow(10, v / 10), 0) / ungated.length;
+    const relGate = -0.691 + 10 * Math.log10(avgP_ungated) - 10;
+    const gated = momentaryBlocks.filter(v => v > relGate && v > absGate);
+    if (gated.length > 0) {
+      const avgP_gated = gated.reduce((s, v) => s + Math.pow(10, v / 10), 0) / gated.length;
+      integrated = -0.691 + 10 * Math.log10(avgP_gated);
+    }
+  }
+
+  // ── LU Range (difference between 95th and 10th percentile of ungated short-term blocks) ──
+  let luRange = 0;
+  const stFiltered = shortTermBlocks.filter(v => v > -70 && isFinite(v)).sort((a,b) => a-b);
+  if (stFiltered.length > 4) {
+    const p10 = stFiltered[Math.floor(stFiltered.length * 0.10)];
+    const p95 = stFiltered[Math.floor(stFiltered.length * 0.95)];
+    luRange = Math.max(0, p95 - p10);
+  }
+
+  // ── True Peak (interpolated, 4x oversampling approximation) ──
+  let truePeak = -Infinity;
+  for (let c = 0; c < nCh; c++) {
+    const ch = audioBuffer.getChannelData(c);
+    for (let i = 1; i < ch.length - 2; i++) {
+      // 4-point sinc interpolation for 4x oversampling
+      const s0 = ch[i-1], s1 = ch[i], s2 = ch[i+1], s3 = ch[i+2];
+      for (let k = 0; k < 4; k++) {
+        const t = k / 4;
+        // Catmull-Rom interpolation (approximates sinc)
+        const v = 0.5 * ((2*s1) + (-s0+s2)*t + (2*s0-5*s1+4*s2-s3)*t*t + (-s0+3*s1-3*s2+s3)*t*t*t);
+        const db = 20 * Math.log10(Math.abs(v) + 1e-10);
+        if (db > truePeak) truePeak = db;
+      }
+    }
+  }
+
+  return { integrated, momentaryMax, shortTermBlocks, luRange, truePeak };
+}
+
+// ─── Chart ────────────────────────────────────────────────────────
+function drawChart(shortTermBlocks, integrated) {
+  const canvas = document.getElementById('loudnessChart');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = 120 * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = canvas.offsetWidth, H = 120;
+
+  // Y range: -40 to 0 LUFS
+  const minLUFS = -40, maxLUFS = 0;
+  const toY = v => H - ((Math.max(minLUFS, Math.min(maxLUFS, v)) - minLUFS) / (maxLUFS - minLUFS)) * H;
+
+  // Grid lines
+  [-8, -14, -16, -23].forEach(db => {
+    const y = toY(db);
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(200,169,110,0.08)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.moveTo(0, y); ctx.lineTo(W, y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font = '9px JetBrains Mono, monospace';
+    ctx.fillStyle = 'rgba(107,101,96,0.7)';
+    ctx.fillText(db + ' LUFS', 4, y - 3);
+  });
+
+  // Short-term curve
+  const valid = shortTermBlocks.filter(v => isFinite(v));
+  if (valid.length > 1) {
+    ctx.beginPath();
+    const grad = ctx.createLinearGradient(0, 0, W, 0);
+    grad.addColorStop(0, 'rgba(200,169,110,0.4)');
+    grad.addColorStop(0.5, 'rgba(224,192,122,0.9)');
+    grad.addColorStop(1, 'rgba(200,169,110,0.4)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    shortTermBlocks.forEach((v, i) => {
+      const x = (i / (shortTermBlocks.length - 1)) * W;
+      const y = toY(isFinite(v) ? v : minLUFS);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+
+  // Integrated line
+  if (isFinite(integrated)) {
+    const y = toY(integrated);
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(107,101,96,0.6)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.moveTo(0, y); ctx.lineTo(W, y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+// ─── Platform bars ────────────────────────────────────────────────
+function renderPlatforms(integrated) {
+  const list = document.getElementById('platformList');
+  // Bar: map -30 to 0 LUFS range
+  const minLUFS = -30, maxLUFS = 0;
+  const toBarPct = v => Math.max(0, Math.min(100, ((v - minLUFS) / (maxLUFS - minLUFS)) * 100));
+  const targetPct = v => toBarPct(v);
+  const valuePct = toBarPct(integrated);
+
+  list.innerHTML = PLATFORMS.map(p => {
+    const diff = integrated - p.target;
+    let status, statusText, barColor;
+    if (Math.abs(diff) <= p.tolerance) {
+      status = 'ok'; statusText = 'ON TARGET'; barColor = 'var(--green)';
+    } else if (diff < 0) {
+      status = 'warn'; statusText = `${Math.abs(diff).toFixed(1)} LU quiet`; barColor = 'var(--yellow)';
+    } else {
+      status = 'loud'; statusText = `${diff.toFixed(1)} LU loud`; barColor = 'var(--red)';
+    }
+
+    const tPct = targetPct(p.target);
+    return `
+      <div class="platform-row">
+        <span class="platform-name">${p.name}</span>
+        <div class="platform-bar-wrap">
+          <div class="platform-bar" style="width:${valuePct}%;background:${barColor}"></div>
+          <div class="platform-target-line" style="left:${tPct}%"></div>
+        </div>
+        <span class="platform-status ${status}">${statusText}</span>
+      </div>`;
+  }).join('');
+}
+
+// ─── Colour helpers ───────────────────────────────────────────────
+function lufsClass(val, target=-14) {
+  const diff = val - target;
+  if (Math.abs(diff) <= 1.5) return 'ok';
+  if (diff < 0) return 'warn';
+  return 'bad';
+}
+function peakClass(val) {
+  if (val <= -1) return 'ok';
+  if (val <= 0)  return 'warn';
+  return 'bad';
+}
+function rangeClass(val) {
+  if (val >= 4 && val <= 12) return 'ok';
+  if (val < 4)  return 'warn';
+  return 'neutral';
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────
+function setProgress(pct, status) {
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = Math.round(pct) + '%';
+  if (status) document.getElementById('progressStatus').textContent = status;
+}
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.classList.add('visible');
+  document.getElementById('progressWrap').classList.remove('visible');
+}
+function formatSize(b) { return b < 1048576 ? (b/1024).toFixed(1)+' KB' : (b/1048576).toFixed(1)+' MB'; }
+function formatDuration(s) { const m=Math.floor(s/60); return m+':'+(Math.round(s%60)).toString().padStart(2,'0'); }
+function fmt(v, dec=1) { return isFinite(v) ? v.toFixed(dec) : '—'; }
+function tick() { return new Promise(r => setTimeout(r, 20)); }
+
+// ─── Main ─────────────────────────────────────────────────────────
+async function analyzeFile(file) {
+  document.getElementById('errorMsg').classList.remove('visible');
+  document.getElementById('results').classList.remove('visible');
+  document.getElementById('progressWrap').classList.add('visible');
+  setProgress(5, 'Reading file...');
+
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    setProgress(20, 'Decoding audio...');
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 44100 });
+    const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+    setProgress(40, 'Applying K-weighting...');
+    await tick();
+
+    setProgress(60, 'Computing loudness blocks...');
+    await tick();
+
+    const result = analyzeLoudness(audioBuffer);
+
+    setProgress(85, 'Measuring True Peak...');
+    await tick();
+
+    setProgress(100, 'Done!');
+    await new Promise(r => setTimeout(r, 300));
+
+    document.getElementById('progressWrap').classList.remove('visible');
+    document.getElementById('results').classList.add('visible');
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    // File info
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileMeta').textContent = formatSize(file.size) + ' · ' + formatDuration(audioBuffer.duration) + ' · ' + (audioBuffer.numberOfChannels === 2 ? 'stereo' : 'mono');
+
+    // Integrated LUFS
+    const intEl = document.getElementById('intLufs');
+    intEl.className = 'metric-value ' + lufsClass(result.integrated);
+    intEl.innerHTML = fmt(result.integrated) + '<span class="metric-unit">LUFS</span>';
+
+    // True Peak
+    const peakEl = document.getElementById('truePeak');
+    peakEl.className = 'metric-value ' + peakClass(result.truePeak);
+    peakEl.innerHTML = fmt(result.truePeak) + '<span class="metric-unit">dBTP</span>';
+    document.getElementById('truePeakSub').textContent = result.truePeak > -1 ? 'above −1 dBTP limit' : 'within safe limit';
+
+    // Momentary max
+    const momEl = document.getElementById('momentaryMax');
+    momEl.className = 'metric-value ' + lufsClass(result.momentaryMax, -8);
+    momEl.innerHTML = fmt(result.momentaryMax) + '<span class="metric-unit">LUFS</span>';
+
+    // LU Range
+    const rangeEl = document.getElementById('luRange');
+    rangeEl.className = 'metric-value ' + rangeClass(result.luRange);
+    rangeEl.innerHTML = fmt(result.luRange) + '<span class="metric-unit">LU</span>';
+    document.getElementById('luRangeSub').textContent =
+      result.luRange < 4 ? 'very compressed' :
+      result.luRange <= 8 ? 'well balanced' :
+      result.luRange <= 12 ? 'dynamic' : 'highly dynamic';
+
+    // Chart & platforms
+    drawChart(result.shortTermBlocks, result.integrated);
+    renderPlatforms(result.integrated);
+
+    audioCtx.close();
+  } catch(e) {
+    console.error(e);
+    showError('Could not analyze this file. Try MP3, WAV, or FLAC. (' + (e.message || 'unknown error') + ')');
+  }
+}
+
+// ─── Events ───────────────────────────────────────────────────────
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('audio/')) analyzeFile(f);
+  else showError('Please drop a valid audio file.');
+});
+document.getElementById('browseBtn').addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) analyzeFile(fileInput.files[0]); });
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.getElementById('results').classList.remove('visible');
+  fileInput.value = '';
+});
+</script>
+</body>
+</html>
