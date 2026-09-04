@@ -18,9 +18,18 @@
 (function () {
   'use strict';
 
+  /* ── Wait for remote-config.js to apply cached/fetched config ──
+     Both scripts defer their real work to DOMContentLoaded when the
+     document is still parsing, and remote-config.js is included first
+     — so its listener runs first, setting freeBeatsWidgetEnabled to the
+     real value before the gate-check below reads it. Running the gate
+     check synchronously at script-load time (the old behavior) always
+     saw the temporary fail-open default and ignored the admin toggle. */
+  function init() {
+
   /* ── Admin kill-switch ────────────────────────────────────
-     js/remote-config.js sets this synchronously (from cache,
-     before this script runs) when the admin disables the widget.
+     js/remote-config.js sets this (from cache, before init() runs
+     here) when the admin disables the widget.
      Fail-open: undefined/missing → widget still works.        */
   if (window.__DC_CONFIG__ && window.__DC_CONFIG__.freeBeatsWidgetEnabled === false) return;
 
@@ -261,4 +270,11 @@
     setTimeout(setupExitIntent, 3000);
   }
 
+  } // end init()
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
